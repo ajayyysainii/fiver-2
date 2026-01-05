@@ -21,7 +21,7 @@ export default function Landing() {
       <nav className="fixed top-0 w-full z-50 bg-white/80 backdrop-blur-md border-b border-slate-100">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
           <div className="flex items-center space-x-2">
-            <img src={logoImg} alt="Logo" className="w-12 h-12 object-contain" />
+            <img src={logoImg} alt="Logo" className="w-12 h-12 object-contain mix-blend-multiply" />
             <span className="font-display font-bold text-xl tracking-tight text-secondary">FamilyLegacyPlatform</span>
           </div>
           <div className="flex items-center space-x-4">
