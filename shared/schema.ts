@@ -13,6 +13,7 @@ export const profiles = pgTable("profiles", {
   subscriptionTier: text("subscription_tier", { enum: ["gold", "platinum", "uranium"] }),
   hasPaidOneTimeFee: boolean("has_paid_one_time_fee").default(false).notNull(),
   subscriptionStatus: text("subscription_status", { enum: ["active", "inactive"] }).default("inactive"),
+  marketplaceAccess: boolean("marketplace_access").default(false).notNull(),
   createdAt: timestamp("created_at").defaultNow(),
 });
 

@@ -52,6 +52,16 @@ export const api = {
       responses: {
         200: z.custom<typeof profiles.$inferSelect>(),
       },
+    },
+    validateMarketplace: {
+      method: 'GET' as const,
+      path: '/api/marketplace/validate',
+      responses: {
+        200: z.object({
+          valid: z.boolean(),
+          message: z.string()
+        }),
+      },
     }
   },
   payments: {

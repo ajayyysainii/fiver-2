@@ -74,6 +74,8 @@ export async function registerRoutes(
       } else if (type === 'subscription') {
         updates.subscriptionStatus = 'active';
         if (tier) updates.subscriptionTier = tier;
+        // Marketplace access is granted when subscription is active for Pro
+        updates.marketplaceAccess = true;
       }
 
       const profile = await storage.updateProfile(userId, updates);
@@ -81,6 +83,31 @@ export async function registerRoutes(
     } catch (err) {
       res.status(500).json({ message: "Failed to process payment" });
     }
+  });
+
+  app.get(api.profiles.validateMarketplace.path, isAuthenticated, async (req: any, res) => {
+    const userId = req.user.claims.sub;
+    const profile = await storage.getProfile(userId);
+    
+    if (!profile) {
+      return res.status(404).json({ message: "Profile not found" });
+    }
+
+    if (!profile.hasPaidOneTimeFee) {
+      return res.json({ 
+        valid: false, 
+        message: "One-time onboarding fee required for download access." 
+      });
+    }
+
+    if (profile.subscriptionStatus !== 'active') {
+      return res.json({ 
+        valid: false, 
+        message: "Active monthly subscription required for marketplace connection." 
+      });
+    }
+
+    res.json({ valid: true, message: "Marketplace license valid." });
   });
 
   // New endpoints expected by frontend
