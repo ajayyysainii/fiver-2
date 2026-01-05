@@ -1,7 +1,7 @@
 import { useAuth } from "@/hooks/use-auth";
 import { Link, useLocation } from "wouter";
 import { Shield, ArrowRight, CheckCircle2, Users, Briefcase } from "lucide-react";
-import familyBg from "@assets/stock_images/happy_multi-generati_795f301c.jpg";
+import familyBg from "@assets/stock_images/multi-generational_f_5fbbad90.jpg";
 import { Badge } from "@/components/ui/badge";
 
 import logoImg from "@assets/ChatGPT_Image_Dec_30,_2025_at_11_07_14_PM_1767577414931.png";
@@ -56,8 +56,7 @@ export default function Landing() {
         
         <div className="relative z-20 max-w-4xl mx-auto px-4 text-center text-white">
           <h1 className="text-4xl md:text-6xl font-display font-bold mb-6 drop-shadow-lg leading-tight">
-            The Private Marketplace and Legacy Platform <br/>
-            for Trusted Families & Professionals
+            Empowering Families with Privacy, Control, and Connection
           </h1>
         </div>
       </div>
@@ -68,15 +67,15 @@ export default function Landing() {
           
           {/* Family Side */}
           <div className="flex flex-col">
-            <div className="card-premium h-full flex flex-col p-8 bg-white border-t-4 border-t-primary shadow-2xl">
-              <div className="flex items-center gap-3 mb-6">
-                <div className="bg-primary/10 p-3 rounded-full">
-                  <Users className="w-8 h-8 text-primary" />
+            <div className="card-premium h-full flex flex-col p-6 bg-white border-t-4 border-t-primary shadow-2xl scale-95 origin-top">
+              <div className="flex items-center gap-3 mb-4">
+                <div className="bg-primary/10 p-2 rounded-full">
+                  <Users className="w-6 h-6 text-primary" />
                 </div>
-                <h2 className="text-3xl font-display font-bold text-secondary">Family Membership</h2>
+                <h2 className="text-2xl font-display font-bold text-secondary">Family Membership</h2>
               </div>
               
-              <p className="text-slate-600 text-lg mb-8 leading-relaxed">
+              <p className="text-slate-600 text-base mb-6 leading-relaxed">
                 “Access the full FamilyLegacyPlatform — a self-hosted solution giving families complete control over their private legacy, communications, and marketplace.”
               </p>
 
@@ -112,15 +111,15 @@ export default function Landing() {
 
           {/* Professional Side */}
           <div className="flex flex-col">
-            <div className="card-premium h-full flex flex-col p-8 bg-white border-t-4 border-t-amber-500 shadow-2xl">
-              <div className="flex items-center gap-3 mb-6">
-                <div className="bg-amber-50 p-3 rounded-full">
-                  <Briefcase className="w-8 h-8 text-amber-600" />
+            <div className="card-premium h-full flex flex-col p-6 bg-white border-t-4 border-t-amber-500 shadow-2xl scale-95 origin-top">
+              <div className="flex items-center gap-3 mb-4">
+                <div className="bg-amber-50 p-2 rounded-full">
+                  <Briefcase className="w-6 h-6 text-amber-600" />
                 </div>
-                <h2 className="text-3xl font-display font-bold text-secondary">Professional Membership</h2>
+                <h2 className="text-2xl font-display font-bold text-secondary">Professional Membership</h2>
               </div>
               
-              <p className="text-slate-600 text-lg mb-8 leading-relaxed">
+              <p className="text-slate-600 text-base mb-6 leading-relaxed">
                 “Join the FamilyLegacyPlatform Marketplace as a trusted professional with exclusive access to paid family members seeking your services.”
               </p>
 
