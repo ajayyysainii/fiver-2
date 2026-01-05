@@ -2,7 +2,7 @@ import { useAuth } from "@/hooks/use-auth";
 import { Link, useLocation } from "wouter";
 import { Shield, ArrowRight, CheckCircle2, Users, Briefcase } from "lucide-react";
 import familyBg from "@assets/stock_images/happy_multi-generati_795f301c.jpg";
-import { Badge } from "@/components/ui/Badge";
+import { Badge } from "@/components/ui/badge";
 
 export default function Landing() {
   const { user, isLoading } = useAuth();
@@ -151,9 +151,9 @@ export default function Landing() {
                     <span className="text-2xl font-bold text-amber-600">$100/mo</span>
                   </div>
                   <div className="flex gap-2 mt-2">
-                    <Badge variant="outline" className="text-[10px] bg-white">GOLD $100</Badge>
-                    <Badge variant="outline" className="text-[10px] bg-white">PLATINUM $150</Badge>
-                    <Badge variant="outline" className="text-[10px] bg-white">URANIUM $1,000</Badge>
+                    <Badge variant="info" className="text-[10px] bg-white">GOLD $100</Badge>
+                    <Badge variant="info" className="text-[10px] bg-white">PLATINUM $150</Badge>
+                    <Badge variant="info" className="text-[10px] bg-white">URANIUM $1,000</Badge>
                   </div>
                 </div>
               </div>
@@ -177,7 +177,7 @@ export default function Landing() {
                 <li>Marketplace is communication-only</li>
               </ul>
             </div>
-            <div className="space-y-2">
+            <div className="space-y-2 text-[10px] leading-tight opacity-80">
               <p className="font-bold text-secondary uppercase tracking-wider">Liability Disclaimer</p>
               <ul className="list-disc pl-4 space-y-1">
                 <li>FamilyLegacyPlatform is not responsible for: Services, Meetups, Outcomes, or Agreements between users</li>
