@@ -1,7 +1,7 @@
 import { useAuth } from "@/hooks/use-auth";
 import { Link, useLocation } from "wouter";
 import { Shield, ArrowRight, CheckCircle2, Users, Briefcase } from "lucide-react";
-import familyBg from "@assets/stock_images/happy_multi-generati_638d254f.jpg";
+import familyBg from "@assets/stock_images/african_family_multi_fa706795.jpg";
 import { Badge } from "@/components/ui/badge";
 
 import logoImg from "@assets/ChatGPT_Image_Dec_30,_2025_at_11_07_14_PM_1767577414931.png";
