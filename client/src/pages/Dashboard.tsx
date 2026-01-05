@@ -46,7 +46,7 @@ export default function Dashboard() {
         </h1>
         <div className="flex items-center space-x-2 text-slate-500">
           <span>Account Type:</span>
-          <Badge variant="info" className="capitalize">{profile.role}</Badge>
+          <Badge variant="secondary" className="capitalize">{profile.role}</Badge>
         </div>
       </header>
 
@@ -125,7 +125,7 @@ function FamilyDashboard({ profile }: { profile: any }) {
         <div className="bg-white p-6 rounded-xl border border-border shadow-sm">
            <div className="flex items-center justify-between mb-4">
              <h3 className="font-semibold text-slate-600">Platform License</h3>
-             <Badge variant="success">Active</Badge>
+             <Badge variant="default">Active</Badge>
            </div>
            <p className="text-3xl font-bold text-secondary">$10<span className="text-sm font-normal text-slate-400">/mo</span></p>
            <p className="text-xs text-slate-400 mt-2">Maintenance active</p>
@@ -134,7 +134,7 @@ function FamilyDashboard({ profile }: { profile: any }) {
         <div className="bg-white p-6 rounded-xl border border-border shadow-sm">
            <div className="flex items-center justify-between mb-4">
              <h3 className="font-semibold text-slate-600">Infrastructure</h3>
-             <Badge variant="neutral">Self-Hosted</Badge>
+             <Badge variant="outline">Self-Hosted</Badge>
            </div>
            <div className="flex items-center space-x-2 text-slate-600">
              <HardDrive className="w-5 h-5" />
