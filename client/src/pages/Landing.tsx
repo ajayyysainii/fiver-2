@@ -1,7 +1,7 @@
 import { useAuth } from "@/hooks/use-auth";
 import { Link, useLocation } from "wouter";
 import { Shield, ArrowRight, CheckCircle2, Users, Briefcase } from "lucide-react";
-import familyBg from "@assets/stock_images/multi-generational_f_5fbbad90.jpg";
+import familyBg from "@assets/stock_images/happy_multi-generati_638d254f.jpg";
 import { Badge } from "@/components/ui/badge";
 
 import logoImg from "@assets/ChatGPT_Image_Dec_30,_2025_at_11_07_14_PM_1767577414931.png";
@@ -46,18 +46,17 @@ export default function Landing() {
       {/* Hero with Family Background */}
       <div className="relative min-h-[60vh] flex items-center justify-center pt-20">
         <div 
-          className="absolute inset-0 z-0 bg-cover bg-center bg-no-repeat grayscale brightness-50 contrast-125"
+          className="absolute inset-0 z-0 bg-cover bg-center bg-no-repeat brightness-[0.45] contrast-[1.1]"
           style={{ 
             backgroundImage: `url(${familyBg})`
           }}
         />
-        <div className="absolute inset-0 z-10 bg-gradient-to-b from-black/60 via-black/40 to-[#faf9f6]" />
+        <div className="absolute inset-0 z-10 bg-gradient-to-b from-black/50 via-black/20 to-[#faf9f6]" />
         
         <div className="relative z-20 max-w-4xl mx-auto px-4 text-center text-white">
-          <h1 className="text-4xl md:text-6xl font-display font-bold mb-6 drop-shadow-[0_4px_4px_rgba(0,0,0,0.8)] leading-tight">
-            <span className="bg-black/40 px-4 py-2 rounded-lg inline-block backdrop-blur-sm">
-              Empowering Families with Privacy, Control, and Connection
-            </span>
+          <h1 className="text-4xl md:text-7xl font-display font-bold mb-6 drop-shadow-[0_8px_8px_rgba(0,0,0,0.8)] leading-tight tracking-tight">
+            Empowering Families with <br/>
+            Privacy, Control, and Connection
           </h1>
         </div>
       </div>
