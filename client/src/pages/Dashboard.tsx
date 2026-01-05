@@ -2,7 +2,7 @@ import { useProfile, useSimulatePayment, useSelectTier } from "@/hooks/use-profi
 import { useAuth } from "@/hooks/use-auth";
 import { Shell } from "@/components/layout/Shell";
 import { useLocation } from "wouter";
-import { Badge } from "@/components/ui/Badge";
+import { Badge } from "@/components/ui/badge";
 import { useQuery } from "@tanstack/react-query";
 import { 
   Download, 
@@ -219,7 +219,7 @@ function ProDashboard({ profile }: { profile: any }) {
   const pay = useSimulatePayment();
   const selectTier = useSelectTier();
   const { toast } = useToast();
-  const { data: marketplaceValidation } = useQuery({
+  const { data: marketplaceValidation } = useQuery<{ valid: boolean; message: string }>({
     queryKey: ['/api/marketplace/validate'],
     enabled: !!profile && profile.role === 'pro',
   });
