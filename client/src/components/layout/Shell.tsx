@@ -11,6 +11,8 @@ import {
 import { useState } from "react";
 import { cn } from "@/lib/utils";
 
+import logoImg from "@assets/ChatGPT_Image_Dec_30,_2025_at_11_07_14_PM_1767577414931.png";
+
 export function Shell({ children }: { children: React.ReactNode }) {
   const { user, logout } = useAuth();
   const [location] = useLocation();
@@ -26,7 +28,7 @@ export function Shell({ children }: { children: React.ReactNode }) {
       {/* Mobile Header */}
       <div className="md:hidden bg-white border-b p-4 flex items-center justify-between sticky top-0 z-50">
         <div className="flex items-center space-x-2">
-          <ShieldCheck className="w-6 h-6 text-primary" />
+          <img src={logoImg} alt="Logo" className="w-8 h-8 object-contain" />
           <span className="font-display font-bold text-lg text-slate-900">FamilyLegacy</span>
         </div>
         <button onClick={() => setMobileMenuOpen(!mobileMenuOpen)} className="p-2">
@@ -42,9 +44,7 @@ export function Shell({ children }: { children: React.ReactNode }) {
         <div className="h-full flex flex-col">
           <div className="p-6 border-b border-slate-100">
             <div className="flex items-center space-x-2">
-              <div className="p-2 bg-primary/10 rounded-lg">
-                <ShieldCheck className="w-6 h-6 text-primary" />
-              </div>
+              <img src={logoImg} alt="Logo" className="w-10 h-10 object-contain" />
               <div>
                 <h1 className="font-display font-bold text-lg leading-tight">FamilyLegacy</h1>
                 <p className="text-[10px] text-slate-500 font-medium tracking-wider uppercase">Platform</p>

@@ -4,6 +4,8 @@ import { Shield, ArrowRight, CheckCircle2, Users, Briefcase } from "lucide-react
 import familyBg from "@assets/stock_images/happy_multi-generati_795f301c.jpg";
 import { Badge } from "@/components/ui/badge";
 
+import logoImg from "@assets/ChatGPT_Image_Dec_30,_2025_at_11_07_14_PM_1767577414931.png";
+
 export default function Landing() {
   const { user, isLoading } = useAuth();
   const [, setLocation] = useLocation();
@@ -19,9 +21,7 @@ export default function Landing() {
       <nav className="fixed top-0 w-full z-50 bg-white/80 backdrop-blur-md border-b border-slate-100">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
           <div className="flex items-center space-x-2">
-            <div className="bg-primary/10 p-2 rounded-lg">
-              <Shield className="w-6 h-6 text-primary" />
-            </div>
+            <img src={logoImg} alt="Logo" className="w-12 h-12 object-contain" />
             <span className="font-display font-bold text-xl tracking-tight text-secondary">FamilyLegacyPlatform</span>
           </div>
           <div className="flex items-center space-x-4">
@@ -56,12 +56,9 @@ export default function Landing() {
         
         <div className="relative z-20 max-w-4xl mx-auto px-4 text-center text-white">
           <h1 className="text-4xl md:text-6xl font-display font-bold mb-6 drop-shadow-lg leading-tight">
-            Preserve Your Heritage. <br/>
-            Own Your Sovereignty.
+            The Private Marketplace and Legacy Platform <br/>
+            for Trusted Families & Professionals
           </h1>
-          <p className="text-xl md:text-2xl opacity-90 font-light max-w-3xl mx-auto drop-shadow-md">
-            (The Private Marketplace and Legacy Platform for Trusted Families & Professionals)
-          </p>
         </div>
       </div>
 
