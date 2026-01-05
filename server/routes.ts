@@ -46,19 +46,16 @@ export async function registerRoutes(
   });
 
   app.patch(api.profiles.update.path, isAuthenticated, async (req: any, res) => {
+    // ... update logic
+  });
+
+  app.delete('/api/profile', isAuthenticated, async (req: any, res) => {
     const userId = req.user.claims.sub;
     try {
-      const input = api.profiles.update.input.parse(req.body);
-      const profile = await storage.updateProfile(userId, input);
-      res.json(profile);
+      await storage.deleteProfile(userId);
+      res.status(204).end();
     } catch (err) {
-      if (err instanceof z.ZodError) {
-        return res.status(400).json({
-          message: err.errors[0].message,
-          field: err.errors[0].path.join('.'),
-        });
-      }
-      throw err;
+      res.status(500).json({ message: "Failed to reset profile" });
     }
   });
 

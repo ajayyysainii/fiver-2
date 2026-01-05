@@ -47,6 +47,16 @@ export default function Dashboard() {
         <div className="flex items-center space-x-2 text-slate-500">
           <span>Account Type:</span>
           <Badge variant="info" className="capitalize">{profile.role}</Badge>
+          <button 
+            onClick={() => {
+              if (confirm("Reset account and switch roles? (This will clear your current progress)")) {
+                fetch('/api/profile', { method: 'DELETE' }).then(() => window.location.href = '/');
+              }
+            }}
+            className="text-[10px] text-slate-400 hover:text-destructive underline ml-2"
+          >
+            Reset Role
+          </button>
         </div>
       </header>
 
