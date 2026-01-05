@@ -46,17 +46,18 @@ export default function Landing() {
       {/* Hero with Family Background */}
       <div className="relative min-h-[60vh] flex items-center justify-center pt-20">
         <div 
-          className="absolute inset-0 z-0 bg-cover bg-center bg-no-repeat"
+          className="absolute inset-0 z-0 bg-cover bg-center bg-no-repeat grayscale brightness-50 contrast-125"
           style={{ 
-            backgroundImage: `url(${familyBg})`,
-            filter: 'brightness(0.7) contrast(1.1)'
+            backgroundImage: `url(${familyBg})`
           }}
         />
-        <div className="absolute inset-0 z-10 bg-gradient-to-b from-black/40 via-black/20 to-[#faf9f6]" />
+        <div className="absolute inset-0 z-10 bg-gradient-to-b from-black/60 via-black/40 to-[#faf9f6]" />
         
         <div className="relative z-20 max-w-4xl mx-auto px-4 text-center text-white">
-          <h1 className="text-4xl md:text-6xl font-display font-bold mb-6 drop-shadow-lg leading-tight">
-            Empowering Families with Privacy, Control, and Connection
+          <h1 className="text-4xl md:text-6xl font-display font-bold mb-6 drop-shadow-[0_4px_4px_rgba(0,0,0,0.8)] leading-tight">
+            <span className="bg-black/40 px-4 py-2 rounded-lg inline-block backdrop-blur-sm">
+              Empowering Families with Privacy, Control, and Connection
+            </span>
           </h1>
         </div>
       </div>
