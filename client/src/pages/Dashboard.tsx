@@ -222,6 +222,7 @@ function ProDashboard({ profile }: { profile: any }) {
   const { data: marketplaceValidation } = useQuery<{ valid: boolean; message: string }>({
     queryKey: ['/api/marketplace/validate'],
     enabled: !!profile && profile.role === 'pro',
+    initialData: { valid: false, message: "Valid license required." }
   });
 
   const handlePay = () => {
@@ -245,9 +246,10 @@ function ProDashboard({ profile }: { profile: any }) {
           <ShieldCheck className="w-20 h-20 text-primary mx-auto mb-6" />
           <h2 className="text-3xl font-display font-bold mb-4">Professional Partner Program</h2>
           <p className="text-slate-600 text-lg mb-8 leading-relaxed">
-             Join our network of certified legacy professionals. 
-             This requires a one-time onboarding fee which covers training, 
-             certification, and white-label setup.
+             Join our network of certified legacy professionals. This requires a one-time onboarding fee which covers training, certification, and white-label -setup
+             <br /><br />
+             <strong>Marketplace Access Only:</strong> 
+             Full permission to post your services, showcase your expertise, and engage directly with paid family members seeking trusted professionals.
           </p>
           <div className="text-5xl font-bold text-secondary mb-8">$20,000</div>
           <button onClick={handlePay} disabled={pay.isPending} className="btn-primary text-lg px-12">
