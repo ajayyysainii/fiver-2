@@ -53,8 +53,8 @@ export default function Landing() {
         />
         <div className="absolute inset-0 z-10 bg-gradient-to-b from-black/50 via-black/20 to-[#faf9f6]" />
         
-        <div className="relative z-20 max-w-4xl mx-auto px-4 text-center text-slate-100">
-          <h1 className="text-4xl md:text-7xl font-display font-bold mb-6 drop-shadow-[0_8px_8px_rgba(0,0,0,0.8)] leading-tight tracking-tight">
+        <div className="relative z-20 max-w-4xl mx-auto px-4 text-center">
+          <h1 className="text-4xl md:text-7xl font-display font-bold mb-6 text-slate-100 drop-shadow-[0_4px_8px_rgba(0,0,0,0.7)] leading-tight tracking-tight">
             Empowering Families with <br/>
             Privacy, Control, and Connection
           </h1>
