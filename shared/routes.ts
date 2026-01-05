@@ -66,6 +66,16 @@ export const api = {
       input: z.object({ tier: z.enum(['gold', 'platinum', 'uranium']) }),
       responses: { 200: z.custom<typeof profiles.$inferSelect>() }
     }
+  },
+  marketplace: {
+    validate: {
+      method: 'GET' as const,
+      path: '/api/marketplace/validate',
+      responses: {
+        200: z.object({ valid: z.boolean(), message: z.string() }),
+        403: z.object({ valid: z.boolean(), message: z.string() }),
+      }
+    }
   }
 };
 
