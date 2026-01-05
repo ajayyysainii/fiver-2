@@ -20,7 +20,7 @@ export default function Landing() {
   }
 
   return (
-    <div className="min-h-screen bg-[#faf9f6] font-sans text-slate-900 overflow-x-hidden">
+    <div className="min-h-screen bg-white font-sans text-slate-900 overflow-x-hidden">
       {/* Navbar */}
       <nav className="fixed top-0 w-full z-50 bg-white/80 backdrop-blur-md border-b border-slate-100">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
@@ -47,33 +47,9 @@ export default function Landing() {
         </div>
       </nav>
 
-      {/* Hero with Family Background */}
-      <div className="relative min-h-[60vh] flex items-center justify-center pt-20">
-        <div 
-          className="absolute inset-0 z-0 bg-cover bg-center bg-no-repeat brightness-[0.45] contrast-[1.1]"
-          style={{ 
-            backgroundImage: `url(${familyBg})`
-          }}
-        />
-        <div className="absolute inset-0 z-10 bg-gradient-to-b from-black/50 via-black/20 to-[#faf9f6]" />
-        
-        <div className="relative z-20 max-w-4xl mx-auto px-4 text-center">
-          <h1 className="text-4xl md:text-7xl font-display font-bold mb-6 text-slate-100 drop-shadow-[0_4px_8px_rgba(0,0,0,0.7)] leading-tight tracking-tight">
-            Empowering Families with <br/>
-            Privacy, Control, and Connection
-          </h1>
-        </div>
-      </div>
-
-      {/* Hero with Family Background */}
-      <div className="relative min-h-[70vh] flex items-center justify-center pt-20">
-        <div 
-          className="absolute inset-0 z-0 bg-cover bg-center bg-no-repeat brightness-[0.45] contrast-[1.1]"
-          style={{ 
-            backgroundImage: `url(${familyBg})`
-          }}
-        />
-        <div className="absolute inset-0 z-10 bg-gradient-to-b from-black/50 via-black/20 to-[#faf9f6]" />
+      {/* Hero Section */}
+      <div className="relative min-h-[70vh] flex items-center justify-center pt-20 bg-slate-900">
+        <div className="absolute inset-0 z-10 bg-gradient-to-b from-black/50 via-black/20 to-white" />
         
         <div className="relative z-20 max-w-5xl mx-auto px-4 text-center">
           <h1 className="text-4xl md:text-7xl font-display font-bold mb-6 text-slate-100 drop-shadow-[0_4px_8px_rgba(0,0,0,0.7)] leading-tight tracking-tight">
@@ -220,7 +196,7 @@ export default function Landing() {
                   </li>
                 ))}
               </ul>
-              <img src={familyBg} alt="Family Experience" className="rounded-xl w-full h-48 object-cover shadow-sm group-hover:shadow-md transition-all" />
+              <img src={familyBg} alt="Family Experience" className="rounded-xl w-full h-48 object-cover shadow-sm group-hover:shadow-md transition-all mix-blend-multiply" />
             </div>
             <div className="bg-slate-50 p-10 rounded-3xl border border-slate-100 hover:border-amber-400/20 transition-all group">
               <h3 className="text-2xl font-display font-bold text-amber-600 mb-6 flex items-center gap-3">
@@ -239,7 +215,7 @@ export default function Landing() {
                   </li>
                 ))}
               </ul>
-              <img src={meetingImg} alt="Professional Experience" className="rounded-xl w-full h-48 object-cover shadow-sm group-hover:shadow-md transition-all" />
+              <img src={meetingImg} alt="Professional Experience" className="rounded-xl w-full h-48 object-cover shadow-sm group-hover:shadow-md transition-all mix-blend-multiply" />
             </div>
           </div>
         </div>
