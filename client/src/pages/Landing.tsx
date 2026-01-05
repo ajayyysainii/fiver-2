@@ -1,7 +1,11 @@
 import { useAuth } from "@/hooks/use-auth";
 import { Link, useLocation } from "wouter";
-import { Shield, ArrowRight, CheckCircle2, Users, Briefcase } from "lucide-react";
+import { Shield, ArrowRight, CheckCircle2, Users, Briefcase, Lock, Globe, Server, HeartHandshake } from "lucide-react";
 import familyBg from "@assets/stock_images/african_family_multi_fa706795.jpg";
+import vaultImg from "@assets/stock_images/secure_private_digit_21d68cf7.jpg";
+import meetingImg from "@assets/stock_images/professional_busines_653c1134.jpg";
+import serverImg from "@assets/stock_images/modern_home_server_h_bc310856.jpg";
+import promoVideo from "@assets/Family_Legacy_Platform__Secure_Family_Archive_1767583834324.mp4";
 import { Badge } from "@/components/ui/badge";
 
 import logoImg from "@assets/ChatGPT_Image_Dec_30,_2025_at_11_07_14_PM_1767577414931.png";
@@ -61,8 +65,192 @@ export default function Landing() {
         </div>
       </div>
 
+      {/* Hero with Family Background */}
+      <div className="relative min-h-[70vh] flex items-center justify-center pt-20">
+        <div 
+          className="absolute inset-0 z-0 bg-cover bg-center bg-no-repeat brightness-[0.45] contrast-[1.1]"
+          style={{ 
+            backgroundImage: `url(${familyBg})`
+          }}
+        />
+        <div className="absolute inset-0 z-10 bg-gradient-to-b from-black/50 via-black/20 to-[#faf9f6]" />
+        
+        <div className="relative z-20 max-w-5xl mx-auto px-4 text-center">
+          <h1 className="text-4xl md:text-7xl font-display font-bold mb-6 text-slate-100 drop-shadow-[0_4px_8px_rgba(0,0,0,0.7)] leading-tight tracking-tight">
+            Empowering Families with <br/>
+            Privacy, Control, and Connection
+          </h1>
+          <p className="text-xl md:text-2xl text-slate-200 mb-10 max-w-2xl mx-auto font-medium drop-shadow-md">
+            The self-hosted digital platform for families who value sovereignty and multi-generational legacy.
+          </p>
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+            <a href="/api/login" className="btn-primary text-lg py-4 px-8 flex items-center gap-2">
+              Start Your Legacy <ArrowRight className="w-5 h-5" />
+            </a>
+            <button 
+              onClick={() => document.getElementById('video-section')?.scrollIntoView({ behavior: 'smooth' })}
+              className="px-8 py-4 bg-white/10 backdrop-blur-md border border-white/20 text-white rounded-xl font-bold hover:bg-white/20 transition-all"
+            >
+              Watch Video
+            </button>
+          </div>
+        </div>
+      </div>
+
+      {/* Video Section */}
+      <div id="video-section" className="max-w-5xl mx-auto px-4 py-24 relative z-30">
+        <div className="rounded-3xl overflow-hidden shadow-2xl border-8 border-white bg-slate-200 aspect-video relative group">
+          <video 
+            src={promoVideo} 
+            className="w-full h-full object-cover"
+            controls
+            poster={familyBg}
+          />
+        </div>
+        <div className="mt-12 text-center">
+          <h2 className="text-3xl font-display font-bold text-secondary mb-4">Your Legacy. Your Infrastructure. Your Rules.</h2>
+          <p className="text-slate-600 max-w-2xl mx-auto italic">
+            "FamilyLegacyPlatform is built for families who care about privacy, independence, and long-term planning."
+          </p>
+        </div>
+      </div>
+
+      {/* Core Values Section */}
+      <div className="bg-white py-24 relative z-30 border-y border-slate-100">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="grid md:grid-cols-2 gap-16 items-center">
+            <div>
+              <Badge variant="outline" className="mb-4 text-primary border-primary/20 bg-primary/5 px-3 py-1">Built for Sovereignty</Badge>
+              <h2 className="text-4xl font-display font-bold text-secondary mb-6 leading-tight">What Is FamilyLegacyPlatform?</h2>
+              <div className="space-y-6 text-slate-600 text-lg leading-relaxed">
+                <p>
+                  FamilyLegacyPlatform is a self-hosted digital platform designed to help families organize their legacy, communicate privately, and connect with trusted professionals — all while maintaining full ownership and control of their data.
+                </p>
+                <p>
+                  Unlike traditional SaaS platforms, we do not host your information, manage your servers, or store your data. You receive the software, install it on your own hosting environment, and control everything.
+                </p>
+              </div>
+              <div className="grid grid-cols-2 gap-6 mt-10">
+                {[
+                  { icon: Lock, title: "Privacy", desc: "No data leaves your server" },
+                  { icon: Globe, title: "Independence", desc: "No forced dependencies" },
+                  { icon: Server, title: "Ownership", desc: "You own the database" },
+                  { icon: HeartHandshake, title: "Trust", desc: "Direct pro relations" }
+                ].map((item, i) => (
+                  <div key={i} className="flex gap-3">
+                    <item.icon className="w-6 h-6 text-primary shrink-0" />
+                    <div>
+                      <p className="font-bold text-secondary text-sm">{item.title}</p>
+                      <p className="text-xs text-slate-500">{item.desc}</p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+            <div className="relative">
+              <div className="absolute -inset-4 bg-primary/5 rounded-3xl -rotate-2" />
+              <img 
+                src={vaultImg} 
+                alt="Secure Digital Vault" 
+                className="relative rounded-2xl shadow-xl w-full object-cover aspect-[4/3] rotate-1" 
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Hosting Section */}
+      <div className="bg-slate-50 py-24 relative z-30">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="grid md:grid-cols-2 gap-16 items-center flex-row-reverse">
+            <div className="md:order-2">
+              <Badge variant="outline" className="mb-4 text-amber-600 border-amber-200 bg-amber-50 px-3 py-1">Self-Hosted by Design</Badge>
+              <h2 className="text-4xl font-display font-bold text-secondary mb-6 leading-tight">You Control the Infrastructure</h2>
+              <div className="space-y-4 text-slate-600">
+                <p className="text-lg">This platform is intentionally designed as self-hosted software. This means:</p>
+                <ul className="space-y-3">
+                  {[
+                    "You connect your own domain",
+                    "You choose your hosting provider",
+                    "You manage your own database",
+                    "You control your backups and security"
+                  ].map((item, i) => (
+                    <li key={i} className="flex items-center gap-3">
+                      <div className="w-1.5 h-1.5 rounded-full bg-amber-500" />
+                      <span>{item}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </div>
+            <div className="md:order-1 relative">
+              <div className="absolute -inset-4 bg-amber-500/5 rounded-3xl rotate-2" />
+              <img 
+                src={serverImg} 
+                alt="Self-Hosting Infrastructure" 
+                className="relative rounded-2xl shadow-xl w-full object-cover aspect-[4/3] -rotate-1" 
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Ecosystem Section */}
+      <div className="py-24 relative z-30 bg-white border-b border-slate-100">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-16">
+            <h2 className="text-4xl font-display font-bold text-secondary mb-4">Two Sides. One Trusted Ecosystem.</h2>
+            <p className="text-slate-500 max-w-2xl mx-auto">Connecting families with legacy-focused professionals in a private, paid-only environment.</p>
+          </div>
+          <div className="grid md:grid-cols-2 gap-12 items-start">
+            <div className="bg-slate-50 p-10 rounded-3xl border border-slate-100 hover:border-primary/20 transition-all group">
+              <h3 className="text-2xl font-display font-bold text-primary mb-6 flex items-center gap-3">
+                <Users className="w-8 h-8" /> Family Platform
+              </h3>
+              <ul className="space-y-4 text-slate-600 mb-8">
+                {[
+                  "Private family access & vault",
+                  "Internal communication tools",
+                  "Legacy organization features",
+                  "Secure connection to the Family Marketplace"
+                ].map((item, i) => (
+                  <li key={i} className="flex items-start gap-3">
+                    <CheckCircle2 className="w-5 h-5 text-primary mt-0.5 shrink-0" />
+                    <span>{item}</span>
+                  </li>
+                ))}
+              </ul>
+              <img src={familyBg} alt="Family Experience" className="rounded-xl w-full h-48 object-cover shadow-sm group-hover:shadow-md transition-all" />
+            </div>
+            <div className="bg-slate-50 p-10 rounded-3xl border border-slate-100 hover:border-amber-400/20 transition-all group">
+              <h3 className="text-2xl font-display font-bold text-amber-600 mb-6 flex items-center gap-3">
+                <Briefcase className="w-8 h-8" /> Professional Marketplace
+              </h3>
+              <ul className="space-y-4 text-slate-600 mb-8">
+                {[
+                  "Create a professional profile",
+                  "Post services and content",
+                  "Message verified family users",
+                  "Build long-term professional relationships"
+                ].map((item, i) => (
+                  <li key={i} className="flex items-start gap-3">
+                    <CheckCircle2 className="w-5 h-5 text-amber-500 mt-0.5 shrink-0" />
+                    <span>{item}</span>
+                  </li>
+                ))}
+              </ul>
+              <img src={meetingImg} alt="Professional Experience" className="rounded-xl w-full h-48 object-cover shadow-sm group-hover:shadow-md transition-all" />
+            </div>
+          </div>
+        </div>
+      </div>
+
       {/* Dual Section Content */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 -mt-24 relative z-30 pb-24">
+      <div id="pricing" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24 relative z-30">
+        <div className="text-center mb-16">
+          <h2 className="text-4xl font-display font-bold text-secondary mb-4">Transparent Licensing</h2>
+          <p className="text-slate-500">Simple, predictable pricing for a platform you own.</p>
+        </div>
         <div className="grid lg:grid-cols-2 gap-8">
           
           {/* Family Side */}

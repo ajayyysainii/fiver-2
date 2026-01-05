@@ -1,0 +1,89 @@
+What Is FamilyLegacyPlatform?
+FamilyLegacyPlatform is a self-hosted digital platform designed to help families organize their legacy, communicate privately, and connect with trusted professionals — all while maintaining full ownership and control of their data.
+Unlike traditional SaaS platforms, we do not host your information, manage your servers, or store your data. You receive the software, install it on your own hosting environment, and control everything.
+Your legacy. Your infrastructure. Your rules.
+Built for Families Who Value Control
+FamilyLegacyPlatform was created for families who care about:
+Privacy
+Independence
+Long-term planning
+Trusted professional relationships
+When you use our platform, your family:
+Owns the software
+Chooses the hosting provider
+Controls the database
+Decides who has access
+There are no hidden data dependencies and no forced hosting relationships.
+Two Sides. One Trusted Ecosystem.
+FamilyLegacyPlatform is made up of two connected but separate experiences:
+🏠 Family Platform
+Families receive the full platform after a one-time setup fee.
+Family features include:
+Private family access
+Internal communication tools
+Legacy organization features
+Secure connection to the Family Marketplace
+Self-hosted installation on your own server
+Families pay:
+$200 one-time setup
+$10/month platform license
+💼 Professional Marketplace
+Professionals join only to access the Family Marketplace.
+Professionals:
+Do not receive the full family platform
+Do not access family data
+Do not manage family systems
+They can:
+Create a professional profile
+Post services and content
+Message paid family users
+Build long-term professional relationships
+Professional access is limited, licensed, and verified.
+A Private, Paid-Only Marketplace
+The Family Marketplace is not a public directory.
+Only:
+Paid families using FamilyLegacyPlatform
+Approved professionals with active licenses
+can participate.
+There is:
+No shopping cart
+No in-platform payments
+No transaction processing
+The marketplace exists solely for connection, communication, and trust.
+Self-Hosted by Design
+FamilyLegacyPlatform is intentionally designed as self-hosted software.
+This means:
+You connect your own domain
+You choose your hosting provider
+You manage your own database
+You control your backups and security
+We provide:
+The software
+Updates
+Usage guidance
+Optional support add-ons
+We do not:
+Log into your servers
+Manage databases
+Access private data
+Act as a hosting provider
+Support Without Overreach
+We support users by:
+Explaining how the software works
+Providing documentation and guidance
+Offering optional customer support add-ons
+We never:
+Operate your infrastructure
+Handle sensitive data
+Access private family content
+This structure protects both your family and our platform.
+Designed for Long-Term Legacy
+FamilyLegacyPlatform is not a trend product or short-term tool.
+It is built for:
+Multi-generational families
+Long-term planning
+Private networks
+Sustainable professional relationships
+This platform grows with your family — not at your family’s expense.
+Clear Disclaimer (Recommended Footer Section)
+FamilyLegacyPlatform is self-hosted software. Hosting, domain registration, database management, and data security are the responsibility of the user. FamilyLegacyPlatform does not host or store user data.
