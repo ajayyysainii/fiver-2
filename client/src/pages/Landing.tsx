@@ -147,9 +147,9 @@ export default function Landing() {
                     <span className="text-2xl font-bold text-amber-600">$100/mo</span>
                   </div>
                   <div className="flex gap-2 mt-2">
-                    <Badge variant="info" className="text-[10px] bg-white">GOLD $100</Badge>
-                    <Badge variant="info" className="text-[10px] bg-white">PLATINUM $150</Badge>
-                    <Badge variant="info" className="text-[10px] bg-white">URANIUM $1,000</Badge>
+                    <Badge variant="outline" className="text-[10px] bg-white">GOLD $100</Badge>
+                    <Badge variant="outline" className="text-[10px] bg-white">PLATINUM $150</Badge>
+                    <Badge variant="outline" className="text-[10px] bg-white">URANIUM $1,000</Badge>
                   </div>
                 </div>
               </div>

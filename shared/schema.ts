@@ -51,9 +51,9 @@ export const insertProfileSchema = createInsertSchema(profiles).omit({
   createdAt: true,
 });
 
-export const insertTicketSchema = createInsertSchema(tickets).omit({ id: true, createdAt: true });
-export const insertMessageSchema = createInsertSchema(messages).omit({ id: true, createdAt: true });
-export const insertAffiliateSchema = createInsertSchema(affiliates).omit({ id: true, createdAt: true });
+export const insertTicketSchema = createInsertSchema(tickets).omit({ id: true, creatorId: true, createdAt: true });
+export const insertMessageSchema = createInsertSchema(messages).omit({ id: true, senderId: true, createdAt: true });
+export const insertAffiliateSchema = createInsertSchema(affiliates).omit({ id: true, userId: true, createdAt: true });
 
 export type Profile = typeof profiles.$inferSelect;
 export type InsertProfile = z.infer<typeof insertProfileSchema>;
