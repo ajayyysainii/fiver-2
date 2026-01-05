@@ -167,11 +167,27 @@ export default function Landing() {
         </div>
 
         {/* Footer Disclaimer */}
-        <div className="mt-16 text-center max-w-2xl mx-auto">
+        <div className="mt-16 text-center max-w-2xl mx-auto space-y-6">
+          <div className="grid sm:grid-cols-2 gap-4 text-xs text-slate-500 text-left bg-slate-50 p-6 rounded-xl border border-slate-100">
+            <div className="space-y-2">
+              <p className="font-bold text-secondary uppercase tracking-wider">Privacy & Data</p>
+              <ul className="list-disc pl-4 space-y-1">
+                <li>No data is transmitted to FamilyLegacyPlatform servers</li>
+                <li>No data storage by FamilyLegacyPlatform</li>
+                <li>Marketplace is communication-only</li>
+              </ul>
+            </div>
+            <div className="space-y-2">
+              <p className="font-bold text-secondary uppercase tracking-wider">Liability Disclaimer</p>
+              <ul className="list-disc pl-4 space-y-1">
+                <li>FamilyLegacyPlatform is not responsible for: Services, Meetups, Outcomes, or Agreements between users</li>
+              </ul>
+            </div>
+          </div>
           <p className="text-sm text-slate-400 italic leading-relaxed">
             “FamilyLegacyPlatform is self-hosted software. Hosting, domain, and database setup are your responsibility.”
           </p>
-          <div className="mt-8 text-xs text-slate-300">
+          <div className="pt-8 text-xs text-slate-300 border-t border-slate-100">
             © 2024 FamilyLegacyPlatform. Built for sovereignty.
           </div>
         </div>
