@@ -3,6 +3,7 @@ import { useAuth } from "@/hooks/use-auth";
 import { Shell } from "@/components/layout/Shell";
 import { useLocation } from "wouter";
 import { Badge } from "@/components/ui/Badge";
+import { useQuery } from "@tanstack/react-query";
 import { 
   Download, 
   Server, 
@@ -11,7 +12,8 @@ import {
   ShieldCheck, 
   HardDrive,
   Globe,
-  Database
+  Database,
+  ChevronRight
 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { cn } from "@/lib/utils";
@@ -150,8 +152,12 @@ function FamilyDashboard({ profile }: { profile: any }) {
           </h2>
         </div>
         
-        <div className="space-y-4">
-          <div className="flex items-center justify-between p-4 bg-slate-50 rounded-xl border border-slate-100 hover:border-primary/20 transition-colors">
+            <div className="bg-amber-50 border border-amber-200 p-4 rounded-lg mb-6 text-sm text-amber-800">
+              <p className="font-bold mb-1">IMPORTANT NOTICE:</p>
+              <p>FamilyLegacyPlatform is self-hosted software. Hosting, domain, and database setup are your responsibility.</p>
+            </div>
+            <div className="space-y-4">
+              <div className="flex items-center justify-between p-4 bg-slate-50 rounded-xl border border-slate-100 hover:border-primary/20 transition-colors">
             <div className="flex items-center space-x-4">
               <div className="bg-white p-3 rounded-lg shadow-sm border border-slate-100">
                 <Database className="w-6 h-6 text-primary" />
@@ -213,6 +219,10 @@ function ProDashboard({ profile }: { profile: any }) {
   const pay = useSimulatePayment();
   const selectTier = useSelectTier();
   const { toast } = useToast();
+  const { data: marketplaceValidation } = useQuery({
+    queryKey: ['/api/marketplace/validate'],
+    enabled: !!profile && profile.role === 'pro',
+  });
 
   const handlePay = () => {
     pay.mutate("onetime", {
@@ -281,7 +291,7 @@ function ProDashboard({ profile }: { profile: any }) {
               <button 
                 onClick={() => handleSubscribe(tier)} 
                 className={cn("w-full py-2 rounded-lg font-semibold transition-colors", 
-                  tier === 'uranium' ? "btn-primary" : "bg-slate-100 hover:bg-slate-200 text-slate-900"
+                tier === 'uranium' ? "btn-primary" : "bg-slate-100 hover:bg-slate-200 text-slate-900"
                 )}
               >
                 Select {tier}
@@ -296,22 +306,47 @@ function ProDashboard({ profile }: { profile: any }) {
   return (
     <div className="space-y-8">
       <div className="grid lg:grid-cols-3 gap-6">
-        <div className="lg:col-span-2 card-premium">
-          <h2 className="text-xl font-bold mb-4">Partner Resources</h2>
-          <div className="bg-slate-50 p-6 rounded-xl border border-slate-100">
-            <h3 className="font-bold text-lg mb-2">Backend Dashboard Setup Guide</h3>
-            <p className="text-slate-600 mb-4">
-              Complete documentation on setting up the multi-tenant backend for your clients.
-            </p>
-            <div className="prose prose-sm text-slate-600">
-              <p>1. Download the Partner Marketplace Module below.</p>
-              <p>2. Deploy to your secure infrastructure.</p>
-              <p>3. Configure the white-label settings in `config.yaml`.</p>
+        <div className="lg:col-span-2 space-y-6">
+          <div className="card-premium">
+            <h2 className="text-xl font-bold mb-4">Partner Resources</h2>
+            <div className="bg-slate-50 p-6 rounded-xl border border-slate-100">
+              <h3 className="font-bold text-lg mb-2">Backend Dashboard Setup Guide</h3>
+              <p className="text-slate-600 mb-4">
+                Complete documentation on setting up the multi-tenant backend for your clients.
+              </p>
+              <div className="bg-amber-50 border border-amber-200 p-4 rounded-lg mb-6 text-sm text-amber-800">
+                <p className="font-bold mb-1">IMPORTANT NOTICE:</p>
+                <p>FamilyLegacyPlatform is self-hosted software. Hosting, domain, and database setup are your responsibility.</p>
+              </div>
+              <div className="prose prose-sm text-slate-600">
+                <p>1. Download the Partner Marketplace Module below.</p>
+                <p>2. Deploy to your secure infrastructure.</p>
+                <p>3. Configure the white-label settings in `config.yaml`.</p>
+              </div>
+              <button className="btn-secondary mt-6">
+                <Download className="w-4 h-4 mr-2" />
+                Download Partner Module
+              </button>
             </div>
-            <button className="btn-secondary mt-6">
-              <Download className="w-4 h-4 mr-2" />
-              Download Partner Module
-            </button>
+          </div>
+
+          <div className="card-premium">
+            <h2 className="text-xl font-bold mb-4">Marketplace Access</h2>
+            {marketplaceValidation?.valid ? (
+              <div className="space-y-4">
+                <div className="p-4 bg-green-50 border border-green-100 rounded-lg flex items-center gap-3">
+                  <Globe className="w-5 h-5 text-green-600" />
+                  <p className="text-sm text-green-800 font-medium">Connection Active: You can now post content and message family users.</p>
+                </div>
+                <button className="btn-primary w-full">Open Marketplace Portal</button>
+              </div>
+            ) : (
+              <div className="p-6 bg-slate-50 border border-dashed border-slate-200 rounded-xl text-center">
+                <Globe className="w-12 h-12 text-slate-300 mx-auto mb-4" />
+                <h3 className="font-bold text-slate-400">Marketplace Locked</h3>
+                <p className="text-sm text-slate-400 mt-2">{marketplaceValidation?.message || "Verify your subscription to connect."}</p>
+              </div>
+            )}
           </div>
         </div>
 
@@ -326,6 +361,20 @@ function ProDashboard({ profile }: { profile: any }) {
              <div>
                <p className="text-slate-400 text-sm">Partner Status</p>
                <p className="text-2xl font-bold">Active & Certified</p>
+             </div>
+           </div>
+
+           <div className="card-premium">
+             <h3 className="font-bold mb-4">Quick Stats</h3>
+             <div className="space-y-4">
+               <div className="flex justify-between items-center pb-4 border-b">
+                 <span className="text-sm text-slate-500">Active Clients</span>
+                 <span className="font-bold">0</span>
+               </div>
+               <div className="flex justify-between items-center pb-4 border-b">
+                 <span className="text-sm text-slate-500">Marketplace Leads</span>
+                 <span className="font-bold">0</span>
+               </div>
              </div>
            </div>
         </div>
