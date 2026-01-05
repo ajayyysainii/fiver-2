@@ -22,7 +22,7 @@ export default function Landing() {
             <div className="bg-primary/10 p-2 rounded-lg">
               <Shield className="w-6 h-6 text-primary" />
             </div>
-            <span className="font-display font-bold text-xl tracking-tight text-secondary">FamilyLegacy</span>
+            <span className="font-display font-bold text-xl tracking-tight text-secondary">FamilyLegacyPlatform</span>
           </div>
           <div className="flex items-center space-x-4">
              {user ? (
@@ -55,12 +55,12 @@ export default function Landing() {
         <div className="absolute inset-0 z-10 bg-gradient-to-b from-black/40 via-black/20 to-[#faf9f6]" />
         
         <div className="relative z-20 max-w-4xl mx-auto px-4 text-center text-white">
-          <h1 className="text-4xl md:text-6xl font-display font-bold mb-6 drop-shadow-lg">
+          <h1 className="text-4xl md:text-6xl font-display font-bold mb-6 drop-shadow-lg leading-tight">
             Preserve Your Heritage. <br/>
             Own Your Sovereignty.
           </h1>
-          <p className="text-xl md:text-2xl opacity-90 font-light max-w-2xl mx-auto drop-shadow-md">
-            The world's first self-hosted distribution platform for digital family legacies.
+          <p className="text-xl md:text-2xl opacity-90 font-light max-w-3xl mx-auto drop-shadow-md">
+            (The Private Marketplace and Legacy Platform for Trusted Families & Professionals)
           </p>
         </div>
       </div>

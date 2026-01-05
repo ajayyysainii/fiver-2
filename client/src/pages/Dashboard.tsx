@@ -48,6 +48,7 @@ export default function Dashboard() {
           <span>Account Type:</span>
           <Badge variant="info" className="capitalize">{profile.role}</Badge>
           <button 
+            data-testid="button-reset-role"
             onClick={() => {
               if (confirm("Reset account and switch roles? (This will clear your current progress)")) {
                 fetch('/api/profile', { method: 'DELETE' }).then(() => window.location.href = '/');
