@@ -26,7 +26,7 @@ export function Shell({ children }: { children: React.ReactNode }) {
   return (
     <div className="min-h-screen bg-slate-50 flex flex-col md:flex-row">
       {/* Mobile Header */}
-      <div className="md:hidden bg-white border-b p-4 flex items-center justify-between sticky top-0 z-50">
+      <div className="md:hidden bg-slate-50 border-b p-4 flex items-center justify-between sticky top-0 z-50">
         <div className="flex items-center space-x-2">
           <img src={logoImg} alt="Logo" className="w-8 h-8 object-contain mix-blend-multiply" />
           <span className="font-display font-bold text-lg text-slate-900">FamilyLegacy</span>
@@ -38,7 +38,7 @@ export function Shell({ children }: { children: React.ReactNode }) {
 
       {/* Sidebar */}
       <aside className={cn(
-        "fixed inset-y-0 left-0 z-40 w-64 bg-white border-r border-slate-200 transform transition-transform duration-200 ease-in-out md:translate-x-0 md:static md:h-screen",
+        "fixed inset-y-0 left-0 z-40 w-64 bg-slate-50 border-r border-slate-200 transform transition-transform duration-200 ease-in-out md:translate-x-0 md:static md:h-screen",
         mobileMenuOpen ? "translate-x-0" : "-translate-x-full"
       )}>
         <div className="h-full flex flex-col">
