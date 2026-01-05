@@ -1,5 +1,5 @@
 import { useAuth } from "@/hooks/use-auth";
-import { useLocation } from "wouter";
+import { Link, useLocation } from "wouter";
 import { Shield, ArrowRight, CheckCircle2, Users, Briefcase } from "lucide-react";
 import familyBg from "@assets/stock_images/happy_multi-generati_795f301c.jpg";
 import { Badge } from "@/components/ui/Badge";
@@ -25,9 +25,20 @@ export default function Landing() {
             <span className="font-display font-bold text-xl tracking-tight text-secondary">FamilyLegacy</span>
           </div>
           <div className="flex items-center space-x-4">
-             <a href="/api/login" className="btn-primary text-sm py-2 px-4">
-               Login / Register
-             </a>
+             {user ? (
+               <div className="flex items-center gap-4">
+                 <Link href="/dashboard" className="btn-secondary text-sm py-2 px-4">
+                   Dashboard
+                 </Link>
+                 <a href="/api/logout" className="text-sm text-slate-500 hover:text-primary transition-colors">
+                   Logout
+                 </a>
+               </div>
+             ) : (
+               <a href="/api/login" className="btn-primary text-sm py-2 px-4">
+                 Login / Register
+               </a>
+             )}
           </div>
         </div>
       </nav>

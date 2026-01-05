@@ -2,7 +2,7 @@ import { useProfile, useSimulatePayment, useSelectTier } from "@/hooks/use-profi
 import { useAuth } from "@/hooks/use-auth";
 import { Shell } from "@/components/layout/Shell";
 import { useLocation } from "wouter";
-import { Badge } from "@/components/ui/badge";
+import { Badge } from "@/components/ui/Badge";
 import { useQuery } from "@tanstack/react-query";
 import { 
   Download, 
