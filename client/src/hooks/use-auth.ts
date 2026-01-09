@@ -18,7 +18,12 @@ async function fetchUser(): Promise<User | null> {
 }
 
 async function logout(): Promise<void> {
-  window.location.href = "/api/logout";
+  // Call logout endpoint
+  await fetch("/api/logout", {
+    credentials: "include",
+  });
+  // Force redirect to clear all client state
+  window.location.href = "/";
 }
 
 export function useAuth() {
@@ -27,13 +32,16 @@ export function useAuth() {
     queryKey: ["/api/auth/user"],
     queryFn: fetchUser,
     retry: false,
-    staleTime: 1000 * 60 * 5, // 5 minutes
+    staleTime: 0, // Always refetch to ensure fresh auth state
+    refetchOnWindowFocus: true, // Refetch when window regains focus
+    refetchOnMount: true, // Always refetch on mount
   });
 
   const logoutMutation = useMutation({
     mutationFn: logout,
     onSuccess: () => {
-      queryClient.setQueryData(["/api/auth/user"], null);
+      // Clear all React Query cache
+      queryClient.clear();
     },
   });
 

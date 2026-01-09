@@ -3,11 +3,11 @@ import type { Server } from "http";
 import { storage } from "./storage";
 import { api } from "@shared/routes";
 import { z } from "zod";
-import { setupAuth, registerAuthRoutes, isAuthenticated } from "./replit_integrations/auth";
+import { setupAuth, registerAuthRoutes, isAuthenticated } from "./auth";
 
 // Role-based Access Control Middleware
 const checkRole = (roles: string[]) => (req: any, res: Response, next: NextFunction) => {
-  const userId = req.user.claims.sub;
+  const userId = req.user.id;
   storage.getProfile(userId).then(profile => {
     if (profile && roles.includes(profile.role)) {
       next();
@@ -48,14 +48,14 @@ export async function registerRoutes(
 
   // Profile Routes
   app.get(api.profiles.get.path, isAuthenticated, async (req: any, res) => {
-    const userId = req.user.claims.sub;
+    const userId = req.user.id;
     const profile = await storage.getProfile(userId);
     if (!profile) return res.status(404).json({ message: "Profile not found" });
     res.json(profile);
   });
 
   app.post(api.profiles.create.path, isAuthenticated, async (req: any, res) => {
-    const userId = req.user.claims.sub;
+    const userId = req.user.id;
     try {
       const input = api.profiles.create.input.parse(req.body);
       const profile = await storage.createProfile(userId, input);

@@ -11,7 +11,7 @@ import {
   type Affiliate
 } from "@shared/schema";
 import { eq, and, or } from "drizzle-orm";
-import { authStorage } from "./replit_integrations/auth/storage";
+import { authStorage } from "./auth/storage";
 
 export interface IStorage {
   getProfile(userId: string): Promise<Profile | undefined>;

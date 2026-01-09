@@ -7,6 +7,7 @@ import meetingImg from "@assets/stock_images/professional_busines_653c1134.jpg";
 import serverImg from "@assets/stock_images/modern_home_server_h_bc310856.jpg";
 import promoVideo from "@assets/Family_Legacy_Platform__Secure_Family_Archive_1767583834324.mp4";
 import { Badge } from "@/components/ui/badge";
+import { useEffect } from "react";
 
 import logoImg from "@assets/ChatGPT_Image_Dec_30,_2025_at_11_07_14_PM_1767577414931.png";
 
@@ -14,10 +15,12 @@ export default function Landing() {
   const { user, isLoading } = useAuth();
   const [, setLocation] = useLocation();
 
-  if (!isLoading && user) {
-    setLocation("/dashboard");
-    return null;
-  }
+  useEffect(() => {
+    // Only redirect if we're not loading AND user is confirmed to exist
+    if (!isLoading && user && user.id) {
+      setLocation("/dashboard");
+    }
+  }, [isLoading, user, setLocation]);
 
   return (
     <div className="min-h-screen bg-white font-sans text-slate-900 overflow-x-hidden">
@@ -39,8 +42,8 @@ export default function Landing() {
                  </a>
                </div>
              ) : (
-               <a href="/api/login" className="btn-primary text-sm py-2 px-4">
-                 Login / Register
+               <a href="/api/auth/google" className="btn-primary text-sm py-2 px-4">
+                 Login with Google
                </a>
              )}
           </div>
@@ -60,7 +63,7 @@ export default function Landing() {
             The self-hosted digital platform for families who value sovereignty and multi-generational legacy.
           </p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-            <a href="/api/login" className="btn-primary text-lg py-4 px-8 flex items-center gap-2">
+            <a href="/api/auth/google" className="btn-primary text-lg py-4 px-8 flex items-center gap-2">
               Start Your Legacy <ArrowRight className="w-5 h-5" />
             </a>
             <button 
@@ -267,7 +270,7 @@ export default function Landing() {
                 </div>
               </div>
 
-              <a href="/api/login" className="btn-primary w-full text-lg py-4 flex items-center justify-center gap-2">
+              <a href="/api/auth/google" className="btn-primary w-full text-lg py-4 flex items-center justify-center gap-2">
                 Get Started <ArrowRight className="w-5 h-5" />
               </a>
             </div>
@@ -318,7 +321,7 @@ export default function Landing() {
                 </div>
               </div>
 
-              <a href="/api/login" className="btn-secondary w-full text-lg py-4 border-amber-200 text-amber-800 flex items-center justify-center gap-2 hover:bg-amber-50">
+              <a href="/api/auth/google" className="btn-secondary w-full text-lg py-4 border-amber-200 text-amber-800 flex items-center justify-center gap-2 hover:bg-amber-50">
                 Apply Now <ArrowRight className="w-5 h-5" />
               </a>
             </div>

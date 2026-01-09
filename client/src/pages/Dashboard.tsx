@@ -17,6 +17,7 @@ import {
 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { cn } from "@/lib/utils";
+import { useEffect } from "react";
 
 export default function Dashboard() {
   const { user, isLoading: isAuthLoading } = useAuth();
@@ -24,8 +25,20 @@ export default function Dashboard() {
   const [, setLocation] = useLocation();
   const { toast } = useToast();
 
-  if (!isAuthLoading && !user) {
-    window.location.href = "/";
+  useEffect(() => {
+    // Redirect to home if not authenticated
+    if (!isAuthLoading && !user) {
+      setLocation("/");
+    }
+  }, [isAuthLoading, user, setLocation]);
+
+  // Show loading while checking auth
+  if (isAuthLoading) {
+    return <div className="min-h-screen flex items-center justify-center bg-slate-50">Loading...</div>;
+  }
+
+  // Don't render if no user (will redirect via useEffect)
+  if (!user || !user.id) {
     return null;
   }
 
