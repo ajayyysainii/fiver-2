@@ -28,7 +28,7 @@ export default function Landing() {
       <nav className="fixed top-0 w-full z-50 bg-white/80 backdrop-blur-md border-b border-slate-100">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
           <div className="flex items-center space-x-2">
-            <img src={logoImg} alt="Logo" className="w-12 h-12 object-contain mix-blend-multiply" />
+            <img src="favicon.png" alt="Logo" className="w-12 h-12 object-contain mix-blend-multiply" />
             <span className="font-display font-bold text-xl tracking-tight text-secondary">FamilyLegacyPlatform</span>
           </div>
           <div className="flex items-center space-x-4">
@@ -80,7 +80,7 @@ export default function Landing() {
       <div id="video-section" className="max-w-5xl mx-auto px-4 py-24 relative z-30">
         <div className="rounded-3xl overflow-hidden shadow-2xl border-8 border-white bg-slate-200 aspect-video relative group">
           <video 
-            src={promoVideo} 
+            src="promoVideo.mp4" 
             className="w-full h-full object-cover"
             controls
             poster={familyBg}
