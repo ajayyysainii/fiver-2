@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from 'react';
-import { MessageCircle, X, Send, Volume2, VolumeX, Trash2, Bot, User, Loader2 } from 'lucide-react';
+import { MessageCircle, X, Send, Volume2, VolumeX, Trash2, Bot, User, Loader2, Paperclip } from 'lucide-react';
 import { useOllamaChat } from '@/hooks/use-ollama-chat';
 import { motion, AnimatePresence } from 'framer-motion';
 
@@ -7,8 +7,10 @@ export default function ChatWidget() {
     const [isOpen, setIsOpen] = useState(false);
     const [inputValue, setInputValue] = useState('');
     const [isMuted, setIsMuted] = useState(false);
+    const [selectedFile, setSelectedFile] = useState<File | null>(null);
     const messagesEndRef = useRef<HTMLDivElement>(null);
     const inputRef = useRef<HTMLInputElement>(null);
+    const fileInputRef = useRef<HTMLInputElement>(null);
 
     const {
         messages,
@@ -61,6 +63,26 @@ export default function ChatWidget() {
     const handleReplayAudio = (content: string) => {
         if (!isMuted) {
             speakText(content);
+        }
+    };
+
+    const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const file = e.target.files?.[0];
+        if (file) {
+            setSelectedFile(file);
+            // You can add file processing logic here
+            console.log('File selected:', file.name);
+        }
+    };
+
+    const handleUploadClick = () => {
+        fileInputRef.current?.click();
+    };
+
+    const handleRemoveFile = () => {
+        setSelectedFile(null);
+        if (fileInputRef.current) {
+            fileInputRef.current.value = '';
         }
     };
 
@@ -171,6 +193,26 @@ export default function ChatWidget() {
 
                         {/* Bottom: Input Area */}
                         <div className="w-full bg-white rounded-2xl shadow-xl overflow-hidden border border-slate-100 shrink-0">
+                            {selectedFile && (
+                                <div className="px-4 py-2 bg-slate-50 border-b border-slate-100 flex items-center justify-between">
+                                    <div className="flex items-center gap-2 overflow-hidden">
+                                        <Paperclip className="w-3 h-3 text-slate-400 shrink-0" />
+                                        <span className="text-xs text-slate-600 truncate font-medium max-w-[200px]">
+                                            {selectedFile.name}
+                                        </span>
+                                        <span className="text-[10px] text-slate-400 bg-slate-200 px-1.5 py-0.5 rounded uppercase shrink-0">
+                                            {selectedFile.name.split('.').pop() || 'FILE'}
+                                        </span>
+                                    </div>
+                                    <button
+                                        onClick={handleRemoveFile}
+                                        className="text-slate-400 hover:text-red-500 transition-colors p-1"
+                                        type="button"
+                                    >
+                                        <X className="w-3 h-3" />
+                                    </button>
+                                </div>
+                            )}
                             <form onSubmit={handleSubmit} className="flex items-center gap-2 p-2">
                                 <input
                                     ref={inputRef}
@@ -182,6 +224,27 @@ export default function ChatWidget() {
                                     disabled={isLoading}
                                     className="flex-1 px-4 py-3 bg-transparent text-sm placeholder:text-slate-400 focus:outline-none"
                                 />
+                                {/* Hidden file input */}
+                                <input
+                                    ref={fileInputRef}
+                                    type="file"
+                                    onChange={handleFileSelect}
+                                    className="hidden"
+                                    accept="image/*,.pdf,.doc,.docx,.txt"
+                                />
+                                {/* Upload button */}
+                                <button
+                                    type="button"
+                                    onClick={handleUploadClick}
+                                    className={`w-10 h-10 rounded-xl flex items-center justify-center transition-all ${selectedFile
+                                        ? 'bg-green-500 text-white hover:bg-green-600'
+                                        : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
+                                        }`}
+                                    title={selectedFile ? `File: ${selectedFile.name}` : 'Upload file'}
+                                >
+                                    <Paperclip className="w-4 h-4" />
+                                </button>
+                                {/* Send button */}
                                 <button
                                     type="submit"
                                     disabled={isLoading || !inputValue.trim()}

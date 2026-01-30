@@ -127,9 +127,9 @@ export function useOllamaChat(options: UseOllamaChatOptions = {}) {
       }
 
       // Adjust speech parameters for more natural delivery
-      // Slightly slower rate for clarity, natural pitch
-      utterance.rate = 0.95;    // Slightly slower for clarity
-      utterance.pitch = 0.95;   // Slightly deeper for male voice
+      // Optimized for deeper, more masculine male voice
+      utterance.rate = 0.9;     // Slower rate for deeper voice clarity
+      utterance.pitch = 0.75;   // Lower pitch for masculine male voice
       utterance.volume = 1.0;
 
       utterance.onstart = () => setIsSpeaking(true);
