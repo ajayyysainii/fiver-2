@@ -65,5 +65,15 @@ export async function registerRoutes(
     }
   });
 
+  app.delete(api.profiles.delete.path, isAuthenticated, async (req: any, res) => {
+    const userId = req.user.id;
+    try {
+      await storage.deleteProfile(userId);
+      res.status(200).json({ message: "Profile deleted successfully" });
+    } catch (err) {
+      res.status(500).json({ message: "Failed to delete profile" });
+    }
+  });
+
   return httpServer;
 }

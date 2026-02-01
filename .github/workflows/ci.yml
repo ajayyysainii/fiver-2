@@ -1,0 +1,50 @@
+name: CI - Test and Type Check
+
+# This workflow runs on all pull requests and pushes
+# to ensure code quality before deployment
+
+on:
+  push:
+    branches:
+      - main
+      - develop
+  pull_request:
+    branches:
+      - main
+      - develop
+
+jobs:
+  test:
+    name: Test and Type Check
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+      
+      - name: Install dependencies
+        run: npm ci
+      
+      - name: Type check
+        run: npm run check
+        continue-on-error: false
+      
+      - name: Build application
+        run: npm run build
+        env:
+          NODE_ENV: production
+      
+      - name: Test Summary
+        if: always()
+        run: |
+          if [ ${{ job.status }} == 'success' ]; then
+            echo "✅ All checks passed!"
+          else
+            echo "❌ Some checks failed!"
+          fi

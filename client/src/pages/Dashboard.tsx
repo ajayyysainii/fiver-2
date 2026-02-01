@@ -4,12 +4,12 @@ import { Shell } from "@/components/layout/Shell";
 import { useLocation } from "wouter";
 import { Badge } from "@/components/ui/badge";
 import { useQuery } from "@tanstack/react-query";
-import { 
-  Download, 
-  Server, 
-  CreditCard, 
-  Check, 
-  ShieldCheck, 
+import {
+  Download,
+  Server,
+  CreditCard,
+  Check,
+  ShieldCheck,
   HardDrive,
   Globe,
   Database,
@@ -60,11 +60,16 @@ export default function Dashboard() {
         <div className="flex items-center space-x-2 text-slate-500">
           <span>Account Type:</span>
           <Badge variant="info" className="capitalize">{profile.role}</Badge>
-          <button 
+          <button
             data-testid="button-reset-role"
-            onClick={() => {
+            onClick={async () => {
               if (confirm("Reset account and switch roles? (This will clear your current progress)")) {
-                fetch('/api/profile', { method: 'DELETE' }).then(() => window.location.href = '/');
+                try {
+                  await fetch('/api/profile', { method: 'DELETE' });
+                  window.location.href = '/onboarding';
+                } catch (error) {
+                  console.error('Failed to reset role:', error);
+                }
               }
             }}
             className="text-[10px] text-slate-400 hover:text-destructive underline ml-2"
@@ -122,7 +127,7 @@ function FamilyDashboard({ profile }: { profile: any }) {
             <span className="text-4xl font-bold text-secondary">$200</span>
             <span className="text-slate-500 mb-1 ml-2">/ one-time</span>
           </div>
-          <button 
+          <button
             onClick={handlePay}
             disabled={pay.isPending}
             className="btn-primary w-full"
@@ -130,7 +135,7 @@ function FamilyDashboard({ profile }: { profile: any }) {
             {pay.isPending ? "Processing..." : "Purchase License"}
           </button>
         </div>
-        
+
         <div className="card-premium bg-slate-50 border-dashed">
           <div className="h-full flex flex-col items-center justify-center text-center p-6 opacity-60">
             <Server className="w-16 h-16 text-slate-300 mb-4" />
@@ -147,23 +152,23 @@ function FamilyDashboard({ profile }: { profile: any }) {
       {/* Status Card */}
       <div className="grid md:grid-cols-3 gap-6">
         <div className="bg-white p-6 rounded-xl border border-border shadow-sm">
-           <div className="flex items-center justify-between mb-4">
-             <h3 className="font-semibold text-slate-600">Platform License</h3>
-             <Badge variant="info">Active</Badge>
-           </div>
-           <p className="text-3xl font-bold text-secondary">$10<span className="text-sm font-normal text-slate-400">/mo</span></p>
-           <p className="text-xs text-slate-400 mt-2">Maintenance active</p>
+          <div className="flex items-center justify-between mb-4">
+            <h3 className="font-semibold text-slate-600">Platform License</h3>
+            <Badge variant="info">Active</Badge>
+          </div>
+          <p className="text-3xl font-bold text-secondary">$10<span className="text-sm font-normal text-slate-400">/mo</span></p>
+          <p className="text-xs text-slate-400 mt-2">Maintenance active</p>
         </div>
-        
+
         <div className="bg-white p-6 rounded-xl border border-border shadow-sm">
-           <div className="flex items-center justify-between mb-4">
-             <h3 className="font-semibold text-slate-600">Infrastructure</h3>
-             <Badge variant="info">Self-Hosted</Badge>
-           </div>
-           <div className="flex items-center space-x-2 text-slate-600">
-             <HardDrive className="w-5 h-5" />
-             <span>Local / Private Cloud</span>
-           </div>
+          <div className="flex items-center justify-between mb-4">
+            <h3 className="font-semibold text-slate-600">Infrastructure</h3>
+            <Badge variant="info">Self-Hosted</Badge>
+          </div>
+          <div className="flex items-center space-x-2 text-slate-600">
+            <HardDrive className="w-5 h-5" />
+            <span>Local / Private Cloud</span>
+          </div>
         </div>
       </div>
 
@@ -175,13 +180,13 @@ function FamilyDashboard({ profile }: { profile: any }) {
             Software Distribution
           </h2>
         </div>
-        
-            <div className="bg-amber-50 border border-amber-200 p-4 rounded-lg mb-6 text-sm text-amber-800">
-              <p className="font-bold mb-1">IMPORTANT NOTICE:</p>
-              <p>FamilyLegacyPlatform is self-hosted software. Hosting, domain, and database setup are your responsibility.</p>
-            </div>
-            <div className="space-y-4">
-              <div className="flex items-center justify-between p-4 bg-slate-50 rounded-xl border border-slate-100 hover:border-primary/20 transition-colors">
+
+        <div className="bg-amber-50 border border-amber-200 p-4 rounded-lg mb-6 text-sm text-amber-800">
+          <p className="font-bold mb-1">IMPORTANT NOTICE:</p>
+          <p>FamilyLegacyPlatform is self-hosted software. Hosting, domain, and database setup are your responsibility.</p>
+        </div>
+        <div className="space-y-4">
+          <div className="flex items-center justify-between p-4 bg-slate-50 rounded-xl border border-slate-100 hover:border-primary/20 transition-colors">
             <div className="flex items-center space-x-4">
               <div className="bg-white p-3 rounded-lg shadow-sm border border-slate-100">
                 <Database className="w-6 h-6 text-primary" />
@@ -270,10 +275,10 @@ function ProDashboard({ profile }: { profile: any }) {
           <ShieldCheck className="w-20 h-20 text-primary mx-auto mb-6" />
           <h2 className="text-3xl font-display font-bold mb-4">Professional Partner Program</h2>
           <p className="text-slate-600 text-lg mb-8 leading-relaxed">
-             Join our network of certified legacy professionals. This requires a one-time onboarding fee which covers training, certification, and white-label -setup
-             <br /><br />
-             <strong>Marketplace Access Only:</strong> 
-             Full permission to post your services, showcase your expertise, and engage directly with paid family members seeking trusted professionals.
+            Join our network of certified legacy professionals. This requires a one-time onboarding fee which covers training, certification, and white-label -setup
+            <br /><br />
+            <strong>Marketplace Access Only:</strong>
+            Full permission to post your services, showcase your expertise, and engage directly with paid family members seeking trusted professionals.
           </p>
           <div className="text-5xl font-bold text-secondary mb-8">$20,000</div>
           <button onClick={handlePay} disabled={pay.isPending} className="btn-primary text-lg px-12">
@@ -314,10 +319,10 @@ function ProDashboard({ profile }: { profile: any }) {
                   White Label Dashboard
                 </li>
               </ul>
-              <button 
-                onClick={() => handleSubscribe(tier)} 
-                className={cn("w-full py-2 rounded-lg font-semibold transition-colors", 
-                tier === 'uranium' ? "btn-primary" : "bg-slate-100 hover:bg-slate-200 text-slate-900"
+              <button
+                onClick={() => handleSubscribe(tier)}
+                className={cn("w-full py-2 rounded-lg font-semibold transition-colors",
+                  tier === 'uranium' ? "btn-primary" : "bg-slate-100 hover:bg-slate-200 text-slate-900"
                 )}
               >
                 Select {tier}
@@ -377,32 +382,32 @@ function ProDashboard({ profile }: { profile: any }) {
         </div>
 
         <div className="space-y-6">
-           <div className="bg-gradient-to-br from-slate-900 to-slate-800 rounded-2xl p-6 text-white shadow-xl">
-             <div className="flex justify-between items-start mb-8">
-               <ShieldCheck className="w-10 h-10 text-primary" />
-               <Badge className="bg-white/10 text-white border-white/20 capitalize">
-                 {profile.subscriptionTier} Partner
-               </Badge>
-             </div>
-             <div>
-               <p className="text-slate-400 text-sm">Partner Status</p>
-               <p className="text-2xl font-bold">Active & Certified</p>
-             </div>
-           </div>
+          <div className="bg-gradient-to-br from-slate-900 to-slate-800 rounded-2xl p-6 text-white shadow-xl">
+            <div className="flex justify-between items-start mb-8">
+              <ShieldCheck className="w-10 h-10 text-primary" />
+              <Badge className="bg-white/10 text-white border-white/20 capitalize">
+                {profile.subscriptionTier} Partner
+              </Badge>
+            </div>
+            <div>
+              <p className="text-slate-400 text-sm">Partner Status</p>
+              <p className="text-2xl font-bold">Active & Certified</p>
+            </div>
+          </div>
 
-           <div className="card-premium">
-             <h3 className="font-bold mb-4">Quick Stats</h3>
-             <div className="space-y-4">
-               <div className="flex justify-between items-center pb-4 border-b">
-                 <span className="text-sm text-slate-500">Active Clients</span>
-                 <span className="font-bold">0</span>
-               </div>
-               <div className="flex justify-between items-center pb-4 border-b">
-                 <span className="text-sm text-slate-500">Marketplace Leads</span>
-                 <span className="font-bold">0</span>
-               </div>
-             </div>
-           </div>
+          <div className="card-premium">
+            <h3 className="font-bold mb-4">Quick Stats</h3>
+            <div className="space-y-4">
+              <div className="flex justify-between items-center pb-4 border-b">
+                <span className="text-sm text-slate-500">Active Clients</span>
+                <span className="font-bold">0</span>
+              </div>
+              <div className="flex justify-between items-center pb-4 border-b">
+                <span className="text-sm text-slate-500">Marketplace Leads</span>
+                <span className="font-bold">0</span>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>

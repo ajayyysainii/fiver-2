@@ -1,0 +1,112 @@
+name: Deploy with PM2 Ecosystem
+
+# This workflow uses PM2 ecosystem configuration
+# for better process management and logging
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    name: Deploy to Production
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+      
+      - name: Install dependencies
+        run: npm ci
+      
+      - name: Type check
+        run: npm run check
+      
+      - name: Build application
+        run: npm run build
+        env:
+          NODE_ENV: production
+      
+      - name: Deploy to Server
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USERNAME }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          port: ${{ secrets.SSH_PORT || 22 }}
+          script: |
+            echo "🚀 Starting deployment..."
+            
+            # Navigate to project directory
+            cd ${{ secrets.PROJECT_PATH }}
+            
+            # Create logs directory if it doesn't exist
+            mkdir -p logs
+            
+            # Pull latest changes
+            echo "📥 Pulling latest changes..."
+            git pull origin main
+            
+            # Install dependencies
+            echo "📦 Installing dependencies..."
+            npm ci --production=false
+            
+            # Build the application
+            echo "🔨 Building application..."
+            npm run build
+            
+            # Reload PM2 with ecosystem file
+            echo "♻️  Reloading PM2..."
+            if pm2 list | grep -q "legacy-builder"; then
+              pm2 reload ecosystem.config.cjs --update-env
+            else
+              pm2 start ecosystem.config.cjs
+            fi
+            
+            # Save PM2 configuration
+            pm2 save
+            
+            # Show status
+            echo "✅ Deployment completed!"
+            pm2 status
+      
+      - name: Health Check
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USERNAME }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          port: ${{ secrets.SSH_PORT || 22 }}
+          script: |
+            # Wait for application to start
+            sleep 5
+            
+            # Check if process is running
+            if pm2 list | grep -q "online.*legacy-builder"; then
+              echo "✅ Application is running!"
+              pm2 info legacy-builder
+            else
+              echo "❌ Application failed to start!"
+              pm2 logs legacy-builder --lines 50
+              exit 1
+            fi
+      
+      - name: Deployment Summary
+        if: always()
+        run: |
+          if [ ${{ job.status }} == 'success' ]; then
+            echo "✅ Deployment successful!"
+            echo "Application is running on production server"
+          else
+            echo "❌ Deployment failed!"
+            echo "Check the logs above for details"
+            exit 1
+          fi

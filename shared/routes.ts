@@ -42,6 +42,14 @@ export const api = {
         400: errorSchemas.validation,
       },
     },
+    delete: {
+      method: 'DELETE' as const,
+      path: '/api/profile',
+      responses: {
+        200: z.object({ message: z.string() }),
+        404: errorSchemas.notFound,
+      },
+    },
     mockPayment: {
       method: 'POST' as const,
       path: '/api/profile/mock-payment',

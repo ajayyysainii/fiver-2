@@ -15,4 +15,13 @@ export function registerAuthRoutes(app: Express): void {
       res.status(500).json({ message: "Failed to fetch user" });
     }
   });
+
+  // Check session status (doesn't require authentication)
+  app.get("/api/auth/session", async (req: any, res) => {
+    if (req.isAuthenticated && req.isAuthenticated()) {
+      res.json({ authenticated: true, user: req.user });
+    } else {
+      res.json({ authenticated: false });
+    }
+  });
 }
