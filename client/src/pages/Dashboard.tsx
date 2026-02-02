@@ -13,11 +13,16 @@ import {
   HardDrive,
   Globe,
   Database,
-  ChevronRight
+  ChevronRight,
+  ShoppingCart,
+  Package,
+  Plus,
+  CheckCircle2
 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { cn } from "@/lib/utils";
 import { useEffect } from "react";
+import { useCart, ADDON_PRODUCTS, Product } from "@/hooks/use-cart";
 
 export default function Dashboard() {
   const { user, isLoading: isAuthLoading } = useAuth();
@@ -261,6 +266,109 @@ function FamilyDashboard({ profile }: { profile: any }) {
           </div>
         </div>
       </div>
+
+      {/* Shop Add-ons Section */}
+      <ShopSection category="family" />
+    </div>
+  );
+}
+
+// ==========================================
+// SHOP SECTION COMPONENT
+// ==========================================
+function ShopSection({ category }: { category: 'family' | 'professional' }) {
+  const { addItem, items } = useCart();
+
+  // Filter add-ons by category
+  const addons = ADDON_PRODUCTS.filter(p => p.category === category);
+
+  const handleAddToCart = (product: Product) => {
+    if (!items.some(item => item.id === product.id)) {
+      addItem(product);
+    }
+  };
+
+  return (
+    <div className="card-premium">
+      <div className="flex items-center justify-between mb-6">
+        <h2 className="text-2xl font-bold flex items-center">
+          <ShoppingCart className="w-6 h-6 mr-3 text-primary" />
+          Add-ons & Services
+        </h2>
+        <Badge variant="secondary" className="bg-primary/10 text-primary">
+          {addons.length} Available
+        </Badge>
+      </div>
+
+      <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
+        {addons.map((product) => {
+          const isInCart = items.some(item => item.id === product.id);
+
+          return (
+            <div
+              key={product.id}
+              className={cn(
+                "group relative p-5 rounded-xl border transition-all duration-200 hover:shadow-lg",
+                isInCart
+                  ? "bg-emerald-50 border-emerald-200"
+                  : "bg-slate-50 border-slate-100 hover:border-primary/30"
+              )}
+            >
+              <div className="flex items-start gap-3 mb-3">
+                <div className={cn(
+                  "w-10 h-10 rounded-lg flex items-center justify-center shrink-0",
+                  isInCart ? "bg-emerald-100" : "bg-white shadow-sm border border-slate-100"
+                )}>
+                  <Package className={cn("w-5 h-5", isInCart ? "text-emerald-600" : "text-primary")} />
+                </div>
+                <div className="flex-1 min-w-0">
+                  <h4 className="font-semibold text-secondary text-sm leading-tight">{product.name}</h4>
+                  <p className="text-xs text-slate-500 mt-1 line-clamp-2">{product.description}</p>
+                </div>
+              </div>
+
+              <div className="flex items-center justify-between mt-4">
+                <div>
+                  {product.price > 0 && (
+                    <span className="font-bold text-secondary">${product.price}</span>
+                  )}
+                  {product.monthlyPrice && product.monthlyPrice > 0 && (
+                    <span className={cn(
+                      "text-sm",
+                      product.price > 0 ? "text-slate-400 ml-1" : "font-bold text-primary"
+                    )}>
+                      {product.price > 0 ? '+' : ''} ${product.monthlyPrice}/mo
+                    </span>
+                  )}
+                </div>
+
+                <button
+                  onClick={() => handleAddToCart(product)}
+                  disabled={isInCart}
+                  className={cn(
+                    "flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm font-medium transition-all",
+                    isInCart
+                      ? "bg-emerald-100 text-emerald-700 cursor-default"
+                      : "bg-primary text-white hover:bg-primary/90 shadow-sm hover:shadow-md"
+                  )}
+                >
+                  {isInCart ? (
+                    <>
+                      <CheckCircle2 className="w-3.5 h-3.5" />
+                      Added
+                    </>
+                  ) : (
+                    <>
+                      <Plus className="w-3.5 h-3.5" />
+                      Add
+                    </>
+                  )}
+                </button>
+              </div>
+            </div>
+          );
+        })}
+      </div>
     </div>
   );
 }
@@ -434,6 +542,9 @@ function ProDashboard({ profile }: { profile: any }) {
           </div>
         </div>
       </div>
+
+      {/* Shop Add-ons Section for Professionals */}
+      <ShopSection category="professional" />
     </div>
   );
 }

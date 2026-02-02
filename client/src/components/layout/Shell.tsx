@@ -1,15 +1,18 @@
 import { useAuth } from "@/hooks/use-auth";
 import { Link, useLocation } from "wouter";
-import { 
-  LogOut, 
-  LayoutDashboard, 
-  ShieldCheck, 
+import {
+  LogOut,
+  LayoutDashboard,
+  ShieldCheck,
   Download,
   Menu,
-  X
+  X,
+  ShoppingCart
 } from "lucide-react";
 import { useState } from "react";
 import { cn } from "@/lib/utils";
+import CartButton from "@/components/ui/CartButton";
+import { useCart } from "@/hooks/use-cart";
 
 import logoImg from "@assets/ChatGPT_Image_Dec_30,_2025_at_11_07_14_PM_1767577414931.png";
 
@@ -17,10 +20,13 @@ export function Shell({ children }: { children: React.ReactNode }) {
   const { user, logout } = useAuth();
   const [location] = useLocation();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const { itemCount } = useCart();
+  const hasCartItems = itemCount > 0;
 
   const navItems = [
     { href: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
     { href: "/downloads", label: "Downloads", icon: Download },
+    { href: "/cart", label: "Cart", icon: ShoppingCart },
   ];
 
   return (
@@ -31,9 +37,12 @@ export function Shell({ children }: { children: React.ReactNode }) {
           <img src={logoImg} alt="Logo" className="w-8 h-8 object-contain mix-blend-multiply" />
           <span className="font-display font-bold text-lg text-slate-900">FamilyLegacy</span>
         </div>
-        <button onClick={() => setMobileMenuOpen(!mobileMenuOpen)} className="p-2">
-          {mobileMenuOpen ? <X /> : <Menu />}
-        </button>
+        <div className="flex items-center gap-2">
+          {hasCartItems && <CartButton />}
+          <button onClick={() => setMobileMenuOpen(!mobileMenuOpen)} className="p-2">
+            {mobileMenuOpen ? <X /> : <Menu />}
+          </button>
+        </div>
       </div>
 
       {/* Sidebar */}
@@ -43,12 +52,19 @@ export function Shell({ children }: { children: React.ReactNode }) {
       )}>
         <div className="h-full flex flex-col">
           <div className="p-6 border-b border-slate-100">
-            <div className="flex items-center space-x-2">
-              <img src={logoImg} alt="Logo" className="w-10 h-10 object-contain mix-blend-multiply" />
-              <div>
-                <h1 className="font-display font-bold text-lg leading-tight">FamilyLegacy</h1>
-                <p className="text-[10px] text-slate-500 font-medium tracking-wider uppercase">Platform</p>
+            <div className="flex items-center justify-between">
+              <div className="flex items-center space-x-2">
+                <img src={logoImg} alt="Logo" className="w-10 h-10 object-contain mix-blend-multiply" />
+                <div>
+                  <h1 className="font-display font-bold text-lg leading-tight">FamilyLegacy</h1>
+                  <p className="text-[10px] text-slate-500 font-medium tracking-wider uppercase">Platform</p>
+                </div>
               </div>
+              {hasCartItems && (
+                <div className="hidden md:block">
+                  <CartButton />
+                </div>
+              )}
             </div>
           </div>
 
@@ -58,8 +74,8 @@ export function Shell({ children }: { children: React.ReactNode }) {
               return (
                 <Link key={item.href} href={item.href} className={cn(
                   "flex items-center space-x-3 px-4 py-3 rounded-xl transition-all duration-200 group",
-                  isActive 
-                    ? "bg-primary text-white shadow-md shadow-primary/20" 
+                  isActive
+                    ? "bg-primary text-white shadow-md shadow-primary/20"
                     : "text-slate-600 hover:bg-slate-50 hover:text-primary"
                 )}>
                   <item.icon className={cn("w-5 h-5", isActive ? "text-white" : "text-slate-400 group-hover:text-primary")} />
@@ -85,8 +101,8 @@ export function Shell({ children }: { children: React.ReactNode }) {
                 <p className="text-xs text-slate-500 truncate">{user?.email}</p>
               </div>
             </div>
-            
-            <button 
+
+            <button
               onClick={() => logout()}
               className="w-full flex items-center justify-center space-x-2 px-4 py-2 text-sm font-medium text-slate-600 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors"
             >
@@ -106,7 +122,7 @@ export function Shell({ children }: { children: React.ReactNode }) {
 
       {/* Mobile Menu Backdrop */}
       {mobileMenuOpen && (
-        <div 
+        <div
           className="fixed inset-0 bg-black/50 z-30 md:hidden backdrop-blur-sm"
           onClick={() => setMobileMenuOpen(false)}
         />

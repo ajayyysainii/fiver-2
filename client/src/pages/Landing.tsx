@@ -1,19 +1,89 @@
 import { useAuth } from "@/hooks/use-auth";
 import { Link, useLocation } from "wouter";
-import { Shield, ArrowRight, CheckCircle2, Users, Briefcase, Lock, Globe, Server, HeartHandshake } from "lucide-react";
+import { Shield, ArrowRight, CheckCircle2, Users, Briefcase, Lock, Globe, Server, HeartHandshake, ShoppingCart } from "lucide-react";
 import familyBg from "@assets/stock_images/african_family_multi_fa706795.jpg";
 import vaultImg from "@assets/stock_images/secure_private_digit_21d68cf7.jpg";
 import meetingImg from "@assets/stock_images/professional_busines_653c1134.jpg";
 import serverImg from "@assets/stock_images/modern_home_server_h_bc310856.jpg";
 import promoVideo from "@assets/Family_Legacy_Platform__Secure_Family_Archive_1767583834324.mp4";
 import { Badge } from "@/components/ui/badge";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import { useCart, PRODUCTS } from "@/hooks/use-cart";
+import CartButton from "@/components/ui/CartButton";
 
 import logoImg from "@assets/ChatGPT_Image_Dec_30,_2025_at_11_07_14_PM_1767577414931.png";
+
+// AddToCartButton component for the pricing cards
+function AddToCartButton({ productId, variant = 'family' }: { productId: string; variant?: 'family' | 'professional' }) {
+  const { addItem, items } = useCart();
+  const product = PRODUCTS.find(p => p.id === productId);
+  const isInCart = items.some(item => item.id === productId);
+
+  if (!product) return null;
+
+  const handleClick = () => {
+    if (!isInCart) {
+      addItem(product);
+    }
+  };
+
+  if (variant === 'professional') {
+    return (
+      <button
+        onClick={handleClick}
+        className={`btn-secondary w-full text-lg py-4 border-amber-200 flex items-center justify-center gap-2 transition-all ${isInCart
+            ? 'bg-emerald-50 text-emerald-700 border-emerald-200'
+            : 'text-amber-800 hover:bg-amber-50'
+          }`}
+      >
+        {isInCart ? (
+          <>
+            <CheckCircle2 className="w-5 h-5" />
+            Added to Cart
+          </>
+        ) : (
+          <>
+            <ShoppingCart className="w-5 h-5" />
+            Add to Cart
+          </>
+        )}
+      </button>
+    );
+  }
+
+  return (
+    <button
+      onClick={handleClick}
+      className={`btn-primary w-full text-lg py-4 flex items-center justify-center gap-2 transition-all ${isInCart ? 'bg-emerald-500 hover:bg-emerald-600' : ''
+        }`}
+    >
+      {isInCart ? (
+        <>
+          <CheckCircle2 className="w-5 h-5" />
+          Added to Cart
+        </>
+      ) : (
+        <>
+          <ShoppingCart className="w-5 h-5" />
+          Add to Cart
+        </>
+      )}
+    </button>
+  );
+}
 
 export default function Landing() {
   const { user, isLoading } = useAuth();
   const [, setLocation] = useLocation();
+  const { addItem, items } = useCart();
+
+  // Handle adding professional plans when clicking tier badges
+  const handleAddProfessionalPlan = (productId: string) => {
+    const product = PRODUCTS.find(p => p.id === productId);
+    if (product && !items.some(item => item.id === productId)) {
+      addItem(product);
+    }
+  };
 
   useEffect(() => {
     // Only redirect if we're not loading AND user is confirmed to exist
@@ -32,20 +102,21 @@ export default function Landing() {
             <span className="font-display font-bold text-xl tracking-tight text-secondary">FamilyLegacyPlatform</span>
           </div>
           <div className="flex items-center space-x-4">
-             {user ? (
-               <div className="flex items-center gap-4">
-                 <Link href="/dashboard" className="btn-secondary text-sm py-2 px-4">
-                   Dashboard
-                 </Link>
-                 <a href="/api/logout" className="text-sm text-slate-500 hover:text-primary transition-colors">
-                   Logout
-                 </a>
-               </div>
-             ) : (
-               <a href="/api/auth/google" className="btn-primary text-sm py-2 px-4">
-                 Login with Google
-               </a>
-             )}
+            <CartButton />
+            {user ? (
+              <div className="flex items-center gap-4">
+                <Link href="/dashboard" className="btn-secondary text-sm py-2 px-4">
+                  Dashboard
+                </Link>
+                <a href="/api/logout" className="text-sm text-slate-500 hover:text-primary transition-colors">
+                  Logout
+                </a>
+              </div>
+            ) : (
+              <a href="/api/auth/google" className="btn-primary text-sm py-2 px-4">
+                Login with Google
+              </a>
+            )}
           </div>
         </div>
       </nav>
@@ -53,10 +124,10 @@ export default function Landing() {
       {/* Hero Section */}
       <div className="relative min-h-[70vh] flex items-center justify-center pt-20 bg-slate-900">
         <div className="absolute inset-0 z-10 bg-gradient-to-b from-black/50 via-black/20 to-white" />
-        
+
         <div className="relative z-20 max-w-5xl mx-auto px-4 text-center">
           <h1 className="text-4xl md:text-7xl font-display font-bold mb-6 text-slate-100 drop-shadow-[0_4px_8px_rgba(0,0,0,0.7)] leading-tight tracking-tight">
-            Empowering Families with <br/>
+            Empowering Families with <br />
             Privacy, Control, and Connection
           </h1>
           <p className="text-xl md:text-2xl text-slate-200 mb-10 max-w-2xl mx-auto font-medium drop-shadow-md">
@@ -66,7 +137,7 @@ export default function Landing() {
             <a href="/api/auth/google" className="btn-primary text-lg py-4 px-8 flex items-center gap-2">
               Start Your Legacy <ArrowRight className="w-5 h-5" />
             </a>
-            <button 
+            <button
               onClick={() => document.getElementById('video-section')?.scrollIntoView({ behavior: 'smooth' })}
               className="px-8 py-4 bg-white/10 backdrop-blur-md border border-white/20 text-white rounded-xl font-bold hover:bg-white/20 transition-all"
             >
@@ -79,8 +150,8 @@ export default function Landing() {
       {/* Video Section */}
       <div id="video-section" className="max-w-5xl mx-auto px-4 py-24 relative z-30">
         <div className="rounded-3xl overflow-hidden shadow-2xl border-8 border-white bg-slate-200 aspect-video relative group">
-          <video 
-            src="promoVideo.mp4" 
+          <video
+            src="promoVideo.mp4"
             className="w-full h-full object-cover"
             controls
             poster={familyBg}
@@ -128,10 +199,10 @@ export default function Landing() {
             </div>
             <div className="relative">
               <div className="absolute -inset-4 bg-primary/5 rounded-3xl -rotate-2" />
-              <img 
-                src={vaultImg} 
-                alt="Secure Digital Vault" 
-                className="relative rounded-2xl shadow-xl w-full object-cover aspect-[4/3] rotate-1" 
+              <img
+                src={vaultImg}
+                alt="Secure Digital Vault"
+                className="relative rounded-2xl shadow-xl w-full object-cover aspect-[4/3] rotate-1"
               />
             </div>
           </div>
@@ -164,10 +235,10 @@ export default function Landing() {
             </div>
             <div className="md:order-1 relative">
               <div className="absolute -inset-4 bg-amber-500/5 rounded-3xl rotate-2" />
-              <img 
-                src={serverImg} 
-                alt="Self-Hosting Infrastructure" 
-                className="relative rounded-2xl shadow-xl w-full object-cover aspect-[4/3] -rotate-1" 
+              <img
+                src={serverImg}
+                alt="Self-Hosting Infrastructure"
+                className="relative rounded-2xl shadow-xl w-full object-cover aspect-[4/3] -rotate-1"
               />
             </div>
           </div>
@@ -231,7 +302,7 @@ export default function Landing() {
           <p className="text-slate-500">Simple, predictable pricing for a platform you own.</p>
         </div>
         <div className="grid lg:grid-cols-2 gap-8">
-          
+
           {/* Family Side */}
           <div className="flex flex-col">
             <div className="card-premium h-full flex flex-col p-6 bg-white border-t-4 border-t-primary shadow-2xl scale-95 origin-top">
@@ -241,7 +312,7 @@ export default function Landing() {
                 </div>
                 <h2 className="text-2xl font-display font-bold text-secondary">Family Membership</h2>
               </div>
-              
+
               <p className="text-slate-600 text-base mb-6 leading-relaxed">
                 “Access the full FamilyLegacyPlatform — a self-hosted solution giving families complete control over their private legacy, communications, and marketplace.”
               </p>
@@ -270,9 +341,7 @@ export default function Landing() {
                 </div>
               </div>
 
-              <a href="/api/auth/google" className="btn-primary w-full text-lg py-4 flex items-center justify-center gap-2">
-                Get Started <ArrowRight className="w-5 h-5" />
-              </a>
+              <AddToCartButton productId="family-membership" />
             </div>
           </div>
 
@@ -285,7 +354,7 @@ export default function Landing() {
                 </div>
                 <h2 className="text-2xl font-display font-bold text-secondary">Professional Membership</h2>
               </div>
-              
+
               <p className="text-slate-600 text-base mb-6 leading-relaxed">
                 “Join the FamilyLegacyPlatform Marketplace as a trusted professional with exclusive access to paid family members seeking your services.”
               </p>
@@ -313,17 +382,30 @@ export default function Landing() {
                     <span className="text-xs text-slate-500 uppercase">Plans from</span>
                     <span className="text-2xl font-bold text-amber-600">$100/mo</span>
                   </div>
-                  <div className="flex gap-2 mt-2">
-                    <Badge variant="outline" className="text-[10px] bg-white">GOLD $100</Badge>
-                    <Badge variant="outline" className="text-[10px] bg-white">PLATINUM $150</Badge>
-                    <Badge variant="outline" className="text-[10px] bg-white">URANIUM $1,000</Badge>
+                  <div className="flex gap-2 mt-2 flex-wrap justify-center">
+                    <button
+                      onClick={() => handleAddProfessionalPlan('professional-gold')}
+                      className="cursor-pointer hover:scale-105 transition-transform"
+                    >
+                      <Badge variant="outline" className="text-[10px] bg-white hover:bg-yellow-50 hover:border-yellow-300">GOLD $100</Badge>
+                    </button>
+                    <button
+                      onClick={() => handleAddProfessionalPlan('professional-platinum')}
+                      className="cursor-pointer hover:scale-105 transition-transform"
+                    >
+                      <Badge variant="outline" className="text-[10px] bg-white hover:bg-slate-100 hover:border-slate-300">PLATINUM $150</Badge>
+                    </button>
+                    <button
+                      onClick={() => handleAddProfessionalPlan('professional-uranium')}
+                      className="cursor-pointer hover:scale-105 transition-transform"
+                    >
+                      <Badge variant="outline" className="text-[10px] bg-white hover:bg-emerald-50 hover:border-emerald-300">URANIUM $1,000</Badge>
+                    </button>
                   </div>
                 </div>
               </div>
 
-              <a href="/api/auth/google" className="btn-secondary w-full text-lg py-4 border-amber-200 text-amber-800 flex items-center justify-center gap-2 hover:bg-amber-50">
-                Apply Now <ArrowRight className="w-5 h-5" />
-              </a>
+              <AddToCartButton productId="professional-gold" variant="professional" />
             </div>
           </div>
 

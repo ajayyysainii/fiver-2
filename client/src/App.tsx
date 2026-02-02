@@ -8,7 +8,10 @@ import Landing from "@/pages/Landing";
 import Dashboard from "@/pages/Dashboard";
 import Onboarding from "@/pages/Onboarding";
 import DownloadPage from "@/pages/download";
+import CartPage from "@/pages/Cart";
 import ChatWidget from "@/components/ui/ChatWidget";
+import CartDrawer from "@/components/ui/CartDrawer";
+import { CartProvider } from "@/hooks/use-cart";
 
 function Router() {
   return (
@@ -17,6 +20,7 @@ function Router() {
       <Route path="/dashboard" component={Dashboard} />
       <Route path="/onboarding" component={Onboarding} />
       <Route path="/downloads" component={DownloadPage} />
+      <Route path="/cart" component={CartPage} />
       {/* Fallback to 404 */}
       <Route component={NotFound} />
     </Switch>
@@ -26,11 +30,14 @@ function Router() {
 function App() {
   return (
     <QueryClientProvider client={queryClient}>
-      <TooltipProvider>
-        <Toaster />
-        <Router />
-        <ChatWidget />
-      </TooltipProvider>
+      <CartProvider>
+        <TooltipProvider>
+          <Toaster />
+          <Router />
+          <CartDrawer />
+          <ChatWidget />
+        </TooltipProvider>
+      </CartProvider>
     </QueryClientProvider>
   );
 }
