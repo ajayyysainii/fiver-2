@@ -2,18 +2,13 @@ import type { Express, Request, Response, NextFunction } from "express";
 import type { Server } from "http";
 import path from "path";
 import fs from "fs";
-import { fileURLToPath } from "url";
-import { dirname } from "path";
 import { storage } from "./storage";
 import { api } from "@shared/routes";
 import { z } from "zod";
 import { setupAuth, registerAuthRoutes, isAuthenticated } from "./auth";
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
-
 // Ensure secure downloads directory exists and has dummy files
-const SECURE_FILES_DIR = path.join(__dirname, "secure_downloads");
+const SECURE_FILES_DIR = path.join(process.cwd(), "server", "secure_downloads");
 if (!fs.existsSync(SECURE_FILES_DIR)) {
   fs.mkdirSync(SECURE_FILES_DIR, { recursive: true });
   fs.writeFileSync(path.join(SECURE_FILES_DIR, "wordpress-plugin.zip"), "Dummy WordPress Plugin Content");
