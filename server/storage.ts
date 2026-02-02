@@ -18,6 +18,7 @@ export interface IStorage {
   createProfile(userId: string, profile: InsertProfile): Promise<Profile>;
   updateProfile(userId: string, updates: Partial<InsertProfile>): Promise<Profile>;
   deleteProfile(userId: string): Promise<void>;
+  markAsPaid(userId: string): Promise<Profile>;
   
   // Admin Management
   getAllProfiles(): Promise<Profile[]>;
@@ -51,6 +52,17 @@ export class DatabaseStorage implements IStorage {
 
   async deleteProfile(userId: string): Promise<void> {
     await db.delete(profiles).where(eq(profiles.userId, userId));
+  }
+
+  async markAsPaid(userId: string): Promise<Profile> {
+    const [updated] = await db.update(profiles)
+      .set({ 
+        hasPaidOneTimeFee: true,
+        subscriptionStatus: 'active'
+      })
+      .where(eq(profiles.userId, userId))
+      .returning();
+    return updated;
   }
 
   async getAllProfiles(): Promise<Profile[]> {

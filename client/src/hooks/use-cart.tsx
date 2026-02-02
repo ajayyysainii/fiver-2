@@ -162,6 +162,20 @@ export const PRODUCTS: Product[] = [
         image: '/family-membership.jpg',
     },
     {
+        id: 'family-onboarding-fee',
+        name: 'Family Platform Activation',
+        description: 'One-time platform license fee for perpetual access to software updates and downloads.',
+        price: 200,
+        category: 'family',
+    },
+    {
+        id: 'professional-onboarding-fee',
+        name: 'Professional Onboarding Fee',
+        description: 'One-time onboarding fee covering training, certification, and white-label setup for the Professional Partner Program.',
+        price: 20000,
+        category: 'professional',
+    },
+    {
         id: 'professional-gold',
         name: 'Professional Membership - Gold',
         description: 'Join the FamilyLegacyPlatform Marketplace with Gold tier access.',

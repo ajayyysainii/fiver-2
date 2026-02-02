@@ -85,9 +85,63 @@ export async function registerRoutes(
     }
   });
 
-  // Download routes - no auth needed, will be protected by parent website
-  app.get("/api/download/:type", async (req, res) => {
+  // Payment Routes
+  // POST /api/payments/checkout - Mark user as paid (simulated checkout)
+  app.post("/api/payments/checkout", isAuthenticated, async (req: any, res) => {
+    const userId = req.user.id;
+    try {
+      const profile = await storage.getProfile(userId);
+      if (!profile) {
+        return res.status(404).json({ message: "Profile not found. Please complete onboarding first." });
+      }
+      
+      // Mark user as paid
+      const updatedProfile = await storage.markAsPaid(userId);
+      res.json({ 
+        success: true, 
+        message: "Payment successful! You now have access to downloads.",
+        profile: updatedProfile 
+      });
+    } catch (err) {
+      console.error("Payment error:", err);
+      res.status(500).json({ message: "Payment failed. Please try again." });
+    }
+  });
+
+  // GET /api/payments/status - Check payment status
+  app.get("/api/payments/status", isAuthenticated, async (req: any, res) => {
+    const userId = req.user.id;
+    try {
+      const profile = await storage.getProfile(userId);
+      if (!profile) {
+        return res.status(404).json({ hasPaid: false, message: "Profile not found" });
+      }
+      res.json({ 
+        hasPaid: profile.hasPaidOneTimeFee,
+        subscriptionStatus: profile.subscriptionStatus 
+      });
+    } catch (err) {
+      res.status(500).json({ message: "Failed to check payment status" });
+    }
+  });
+
+  // Download routes - protected by payment check
+  app.get("/api/download/:type", isAuthenticated, async (req: any, res) => {
+    const userId = req.user.id;
     const { type } = req.params;
+
+    // Check if user has paid
+    try {
+      const profile = await storage.getProfile(userId);
+      if (!profile || !profile.hasPaidOneTimeFee) {
+        return res.status(403).json({ 
+          message: "Payment required to access downloads",
+          hasPaid: false 
+        });
+      }
+    } catch (err) {
+      return res.status(500).json({ message: "Failed to verify payment status" });
+    }
 
     let filename: string;
     let downloadName: string;

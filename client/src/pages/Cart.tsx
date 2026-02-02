@@ -133,70 +133,70 @@ function CartItemRow({ item }: { item: CartItem }) {
     );
 }
 
-function SuggestedProduct({ product }: { product: typeof PRODUCTS[0] }) {
-    const { addItem, items } = useCart();
-    const isInCart = items.some(item => item.id === product.id);
-
-    return (
-        <motion.div
-            whileHover={{ y: -4 }}
-            className="bg-white rounded-xl border border-slate-200 p-4 hover:shadow-lg hover:border-primary/30 transition-all"
-        >
-            <div className="flex items-start gap-3">
-                <div className={`w-10 h-10 rounded-lg flex items-center justify-center shrink-0 ${product.category === 'family' ? 'bg-primary/10' : 'bg-amber-50'
-                    }`}>
-                    {product.category === 'family' ? (
-                        <Package className="w-5 h-5 text-primary" />
-                    ) : (
-                        <Sparkles className="w-5 h-5 text-amber-600" />
-                    )}
-                </div>
-                <div className="flex-1 min-w-0">
-                    <h4 className="font-semibold text-sm text-secondary truncate">{product.name}</h4>
-                    <p className="text-xs text-slate-500 mt-0.5">${product.price.toLocaleString()}</p>
-                </div>
-            </div>
-            <Button
-                onClick={() => addItem(product)}
-                disabled={isInCart}
-                variant="outline"
-                size="sm"
-                className="w-full mt-3 text-xs"
-            >
-                {isInCart ? (
-                    <>
-                        <CheckCircle2 className="w-3 h-3 mr-1" />
-                        In Cart
-                    </>
-                ) : (
-                    <>
-                        <Plus className="w-3 h-3 mr-1" />
-                        Add to Cart
-                    </>
-                )}
-            </Button>
-        </motion.div>
-    );
-}
 
 export default function CartPage() {
     const { items, getTotal, clearCart, itemCount } = useCart();
     const [isProcessing, setIsProcessing] = useState(false);
+    const [checkoutSuccess, setCheckoutSuccess] = useState(false);
     const totals = getTotal();
 
-    // Get products not in cart for suggestions
-    const suggestedProducts = PRODUCTS.filter(
-        product => !items.some(item => item.id === product.id)
-    ).slice(0, 3);
-
-    const handleCheckout = () => {
+    const handleCheckout = async () => {
         setIsProcessing(true);
-        // Simulate checkout process
-        setTimeout(() => {
+
+        try {
+            const response = await fetch('/api/payments/checkout', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                credentials: 'include',
+            });
+
+            const data = await response.json();
+
+            if (response.ok && data.success) {
+                setCheckoutSuccess(true);
+                clearCart();
+                // Redirect to downloads after 2 seconds
+                setTimeout(() => {
+                    window.location.href = '/downloads';
+                }, 2000);
+            } else {
+                alert(data.message || 'Checkout failed. Please try again.');
+            }
+        } catch (error) {
+            console.error('Checkout error:', error);
+            alert('An error occurred during checkout. Please try again.');
+        } finally {
             setIsProcessing(false);
-            alert('Checkout functionality will be connected to a payment processor.');
-        }, 1500);
+        }
     };
+
+    // Show success state after checkout
+    if (checkoutSuccess) {
+        return (
+            <div className="min-h-screen bg-gradient-to-b from-slate-50 to-white flex items-center justify-center">
+                <motion.div
+                    initial={{ opacity: 0, scale: 0.9 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    className="text-center max-w-md px-6"
+                >
+                    <div className="w-24 h-24 rounded-full bg-emerald-100 flex items-center justify-center mx-auto mb-6">
+                        <CheckCircle2 className="w-12 h-12 text-emerald-500" />
+                    </div>
+                    <h1 className="font-display text-3xl font-bold text-secondary mb-4">
+                        Payment Successful!
+                    </h1>
+                    <p className="text-slate-600 mb-6">
+                        Thank you for your purchase. You now have full access to download the platform.
+                    </p>
+                    <p className="text-sm text-slate-500">
+                        Redirecting to downloads...
+                    </p>
+                </motion.div>
+            </div>
+        );
+    }
 
     return (
         <div className="min-h-screen bg-gradient-to-b from-slate-50 to-white">
@@ -240,20 +240,6 @@ export default function CartPage() {
                                 <ArrowRight className="w-5 h-5 ml-2" />
                             </Button>
                         </Link>
-
-                        {/* Suggested products */}
-                        {suggestedProducts.length > 0 && (
-                            <div className="mt-16">
-                                <h3 className="font-display font-semibold text-lg text-secondary mb-4">
-                                    Recommended for You
-                                </h3>
-                                <div className="grid gap-4 md:grid-cols-3">
-                                    {suggestedProducts.map(product => (
-                                        <SuggestedProduct key={product.id} product={product} />
-                                    ))}
-                                </div>
-                            </div>
-                        )}
                     </motion.div>
                 ) : (
                     /* Cart with items */
@@ -279,20 +265,6 @@ export default function CartPage() {
                                     <CartItemRow key={item.id} item={item} />
                                 ))}
                             </AnimatePresence>
-
-                            {/* Suggested products */}
-                            {suggestedProducts.length > 0 && (
-                                <div className="pt-8">
-                                    <h3 className="font-display font-semibold text-lg text-secondary mb-4">
-                                        You might also like
-                                    </h3>
-                                    <div className="grid gap-4 md:grid-cols-3">
-                                        {suggestedProducts.map(product => (
-                                            <SuggestedProduct key={product.id} product={product} />
-                                        ))}
-                                    </div>
-                                </div>
-                            )}
                         </div>
 
                         {/* Order summary */}

@@ -22,7 +22,7 @@ import {
 import { useToast } from "@/hooks/use-toast";
 import { cn } from "@/lib/utils";
 import { useEffect } from "react";
-import { useCart, ADDON_PRODUCTS, Product } from "@/hooks/use-cart";
+import { useCart, ADDON_PRODUCTS, Product, PRODUCTS } from "@/hooks/use-cart";
 
 export default function Dashboard() {
   const { user, isLoading: isAuthLoading } = useAuth();
@@ -99,17 +99,17 @@ export default function Dashboard() {
 function FamilyDashboard({ profile }: { profile: any }) {
   const pay = useSimulatePayment();
   const { toast } = useToast();
+  const { addItem, items } = useCart();
+  const [, setLocation] = useLocation();
 
   const handlePay = () => {
-    pay.mutate("onetime", {
-      onSuccess: () => {
-        toast({
-          title: "Payment Successful",
-          description: "Welcome to the family. Your license is active.",
-          variant: "default",
-        });
-      }
-    });
+    // Find the family onboarding fee product and add to cart
+    const onboardingProduct = PRODUCTS.find(p => p.id === 'family-onboarding-fee');
+    if (onboardingProduct && !items.some(item => item.id === onboardingProduct.id)) {
+      addItem(onboardingProduct);
+    }
+    // Navigate to cart page
+    setLocation('/cart');
   };
 
   const handleDownload = async (type: 'wordpress' | 'standalone' = 'standalone') => {
@@ -158,10 +158,10 @@ function FamilyDashboard({ profile }: { profile: any }) {
           </div>
           <button
             onClick={handlePay}
-            disabled={pay.isPending}
-            className="btn-primary w-full"
+            className="btn-primary w-full flex items-center justify-center"
           >
-            {pay.isPending ? "Processing..." : "Purchase License"}
+            <ShoppingCart className="w-5 h-5 mr-2" />
+            Purchase License
           </button>
         </div>
 
@@ -380,6 +380,8 @@ function ProDashboard({ profile }: { profile: any }) {
   const pay = useSimulatePayment();
   const selectTier = useSelectTier();
   const { toast } = useToast();
+  const { addItem, items } = useCart();
+  const [, setLocation] = useLocation();
   const { data: marketplaceValidation } = useQuery<{ valid: boolean; message: string }>({
     queryKey: ['/api/marketplace/validate'],
     enabled: !!profile && profile.role === 'pro',
@@ -387,11 +389,13 @@ function ProDashboard({ profile }: { profile: any }) {
   });
 
   const handlePay = () => {
-    pay.mutate("onetime", {
-      onSuccess: () => {
-        toast({ title: "Onboarding Complete", description: "Professional account activated." });
-      }
-    });
+    // Find the professional onboarding fee product and add to cart
+    const onboardingProduct = PRODUCTS.find(p => p.id === 'professional-onboarding-fee');
+    if (onboardingProduct && !items.some(item => item.id === onboardingProduct.id)) {
+      addItem(onboardingProduct);
+    }
+    // Navigate to cart page
+    setLocation('/cart');
   };
 
   const handleSubscribe = (tier: string) => {
@@ -413,8 +417,9 @@ function ProDashboard({ profile }: { profile: any }) {
             Full permission to post your services, showcase your expertise, and engage directly with paid family members seeking trusted professionals.
           </p>
           <div className="text-5xl font-bold text-secondary mb-8">$20,000</div>
-          <button onClick={handlePay} disabled={pay.isPending} className="btn-primary text-lg px-12">
-            {pay.isPending ? "Processing..." : "Pay Onboarding Fee"}
+          <button onClick={handlePay} className="btn-primary text-lg px-12">
+            <ShoppingCart className="w-5 h-5 mr-2 inline" />
+            Pay Onboarding Fee
           </button>
         </div>
       </div>

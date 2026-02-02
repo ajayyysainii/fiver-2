@@ -61,13 +61,24 @@ export function useSimulatePayment() {
   return useMutation({
     mutationFn: async (type: "onetime" | "subscription") => {
       try {
-        await apiRequest("POST", `/api/payments/${type}`, {});
+        // Use the real checkout API for onetime payments
+        if (type === "onetime") {
+          const res = await fetch('/api/payments/checkout', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            credentials: 'include',
+          });
+          if (!res.ok) throw new Error('Checkout failed');
+          return await res.json();
+        } else {
+          await apiRequest("POST", `/api/payments/${type}`, {});
+        }
       } catch (err) {
-        // Mock implementation
+        // Mock implementation fallback
         const current = JSON.parse(localStorage.getItem("mock_profile") || "{}");
         if (type === "onetime") {
           current.hasPaidOneTimeFee = true;
-          if (current.role === 'family') current.subscriptionStatus = 'active'; // Family gets active on one-time
+          if (current.role === 'family') current.subscriptionStatus = 'active';
         } else {
           current.subscriptionTier = "gold";
           current.subscriptionStatus = "active";
