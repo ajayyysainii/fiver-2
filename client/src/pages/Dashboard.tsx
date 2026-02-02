@@ -107,11 +107,35 @@ function FamilyDashboard({ profile }: { profile: any }) {
     });
   };
 
-  const handleDownload = () => {
+  const handleDownload = async (type: 'wordpress' | 'standalone' = 'standalone') => {
     toast({
       title: "Download Started",
       description: "The secure container package is downloading...",
     });
+
+    try {
+      const response = await fetch(`/api/download/${type}`);
+      if (!response.ok) throw new Error('Download failed');
+
+      const blob = await response.blob();
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = type === 'wordpress'
+        ? 'family-legacy-wordpress-plugin.zip'
+        : 'family-legacy-platform.zip';
+      document.body.appendChild(a);
+      a.click();
+      window.URL.revokeObjectURL(url);
+      document.body.removeChild(a);
+    } catch (error) {
+      console.error('Download error:', error);
+      toast({
+        title: "Download Failed",
+        description: "There was an error downloading the file.",
+        variant: "destructive",
+      });
+    }
   };
 
   if (!profile.hasPaidOneTimeFee) {
@@ -196,7 +220,7 @@ function FamilyDashboard({ profile }: { profile: any }) {
                 <p className="text-sm text-slate-500">v2.4.0 • Docker Image • 450MB</p>
               </div>
             </div>
-            <button onClick={handleDownload} className="btn-secondary text-sm py-2">
+            <button onClick={() => handleDownload()} className="btn-secondary text-sm py-2">
               <Download className="w-4 h-4 mr-2" />
               Download
             </button>

@@ -1,9 +1,24 @@
 import type { Express, Request, Response, NextFunction } from "express";
 import type { Server } from "http";
+import path from "path";
+import fs from "fs";
+import { fileURLToPath } from "url";
+import { dirname } from "path";
 import { storage } from "./storage";
 import { api } from "@shared/routes";
 import { z } from "zod";
 import { setupAuth, registerAuthRoutes, isAuthenticated } from "./auth";
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+
+// Ensure secure downloads directory exists and has dummy files
+const SECURE_FILES_DIR = path.join(__dirname, "secure_downloads");
+if (!fs.existsSync(SECURE_FILES_DIR)) {
+  fs.mkdirSync(SECURE_FILES_DIR, { recursive: true });
+  fs.writeFileSync(path.join(SECURE_FILES_DIR, "wordpress-plugin.zip"), "Dummy WordPress Plugin Content");
+  fs.writeFileSync(path.join(SECURE_FILES_DIR, "platform-standalone.zip"), "Dummy Standalone Platform Content");
+}
 
 // Role-based Access Control Middleware
 const checkRole = (roles: string[]) => (req: any, res: Response, next: NextFunction) => {
@@ -73,6 +88,32 @@ export async function registerRoutes(
     } catch (err) {
       res.status(500).json({ message: "Failed to delete profile" });
     }
+  });
+
+  // Download routes - no auth needed, will be protected by parent website
+  app.get("/api/download/:type", async (req, res) => {
+    const { type } = req.params;
+
+    let filename: string;
+    let downloadName: string;
+
+    if (type === 'wordpress') {
+      filename = "wordpress-plugin.zip";
+      downloadName = "family-legacy-wordpress-plugin.zip";
+    } else if (type === 'standalone') {
+      filename = "platform-standalone.zip";
+      downloadName = "family-legacy-platform.zip";
+    } else {
+      return res.status(404).json({ message: "File type not found" });
+    }
+
+    const filePath = path.join(SECURE_FILES_DIR, filename);
+    
+    if (!fs.existsSync(filePath)) {
+      return res.status(404).json({ message: "File not found on server" });
+    }
+
+    res.download(filePath, downloadName);
   });
 
   return httpServer;
