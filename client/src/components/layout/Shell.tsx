@@ -28,8 +28,13 @@ export function Shell({ children }: { children: React.ReactNode }) {
     { href: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
     { href: "/downloads", label: "Downloads", icon: Download },
     { href: "/cart", label: "Cart", icon: ShoppingCart },
-    { href: "/control-center", label: "Control Center", icon: Shield },
+    // Control Center is added conditionally below for admin users
   ];
+
+  // Add Control Center for admin users only
+  if (user?.isAdmin) {
+    navItems.push({ href: "/control-center", label: "Control Center", icon: Shield });
+  }
 
   return (
     <div className="min-h-screen bg-slate-50 flex flex-col md:flex-row">

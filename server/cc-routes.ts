@@ -1,4 +1,4 @@
-import type { Express } from "express";
+import type { Express, Request, Response, NextFunction } from "express";
 import { ccStorage } from "./cc-storage";
 import { api } from "@shared/routes";
 import { z } from "zod";
@@ -10,8 +10,46 @@ import {
     insertInternalMessageSchema,
     insertAssistantSchema
 } from "@shared/schema";
+import { authStorage } from "./auth/storage";
+
+// Middleware to require admin access
+async function requireAdmin(req: Request, res: Response, next: NextFunction) {
+    // Check if user is authenticated
+    if (!req.isAuthenticated || !req.isAuthenticated()) {
+        return res.status(401).json({ message: "Unauthorized" });
+    }
+
+    // Get user from session
+    const userId = (req.user as any)?.id;
+    if (!userId) {
+        return res.status(401).json({ message: "Unauthorized" });
+    }
+
+    // Fetch user from database to check admin status
+    const user = await authStorage.getUser(userId);
+    if (!user || !user.isAdmin) {
+        return res.status(403).json({ message: "Forbidden: Admin access required" });
+    }
+
+    next();
+}
 
 export function registerControlCenterRoutes(app: Express) {
+    // Apply admin middleware to all Control Center routes
+    app.use("/api/cc", requireAdmin);
+    app.use("/api/dashboard", requireAdmin);
+    app.use("/api/campaigns", requireAdmin);
+    app.use("/api/agents", requireAdmin);
+    app.use("/api/system", requireAdmin);
+    app.use("/api/assistants", requireAdmin);
+    app.use("/api/conversations", requireAdmin);
+    app.use("/api/vault", requireAdmin);
+    app.use("/api/tasks", requireAdmin);
+    app.use("/api/decisions", requireAdmin);
+    app.use("/api/assets", requireAdmin);
+    app.use("/api/messages", requireAdmin);
+    app.use("/api/integrations", requireAdmin);
+
     // --- DASHBOARD ---
     app.get(api.dashboard.stats.path, async (req, res) => {
         const stats = await ccStorage.getDashboardStats();
