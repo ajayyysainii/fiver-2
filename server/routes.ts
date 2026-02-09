@@ -6,6 +6,7 @@ import { storage } from "./storage";
 import { api } from "@shared/routes";
 import { z } from "zod";
 import { setupAuth, registerAuthRoutes, isAuthenticated } from "./auth";
+import { registerControlCenterRoutes } from "./cc-routes";
 
 // Ensure secure downloads directory exists and has dummy files
 const SECURE_FILES_DIR = path.join(process.cwd(), "server", "secure_downloads");
@@ -33,6 +34,9 @@ export async function registerRoutes(
 ): Promise<Server> {
   await setupAuth(app);
   registerAuthRoutes(app);
+
+  // Register Control Center routes
+  registerControlCenterRoutes(app);
 
   // Admin Routes
   app.get("/api/admin/users", isAuthenticated, checkRole(["admin", "support", "developer"]), async (req, res) => {
@@ -94,13 +98,13 @@ export async function registerRoutes(
       if (!profile) {
         return res.status(404).json({ message: "Profile not found. Please complete onboarding first." });
       }
-      
+
       // Mark user as paid
       const updatedProfile = await storage.markAsPaid(userId);
-      res.json({ 
-        success: true, 
+      res.json({
+        success: true,
         message: "Payment successful! You now have access to downloads.",
-        profile: updatedProfile 
+        profile: updatedProfile
       });
     } catch (err) {
       console.error("Payment error:", err);
@@ -116,9 +120,9 @@ export async function registerRoutes(
       if (!profile) {
         return res.status(404).json({ hasPaid: false, message: "Profile not found" });
       }
-      res.json({ 
+      res.json({
         hasPaid: profile.hasPaidOneTimeFee,
-        subscriptionStatus: profile.subscriptionStatus 
+        subscriptionStatus: profile.subscriptionStatus
       });
     } catch (err) {
       res.status(500).json({ message: "Failed to check payment status" });
@@ -134,9 +138,9 @@ export async function registerRoutes(
     try {
       const profile = await storage.getProfile(userId);
       if (!profile || !profile.hasPaidOneTimeFee) {
-        return res.status(403).json({ 
+        return res.status(403).json({
           message: "Payment required to access downloads",
-          hasPaid: false 
+          hasPaid: false
         });
       }
     } catch (err) {
@@ -157,7 +161,7 @@ export async function registerRoutes(
     }
 
     const filePath = path.join(SECURE_FILES_DIR, filename);
-    
+
     if (!fs.existsSync(filePath)) {
       return res.status(404).json({ message: "File not found on server" });
     }
