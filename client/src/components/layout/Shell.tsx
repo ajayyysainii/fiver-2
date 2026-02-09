@@ -7,7 +7,8 @@ import {
   Download,
   Menu,
   X,
-  ShoppingCart
+  ShoppingCart,
+  Shield
 } from "lucide-react";
 import { useState } from "react";
 import { cn } from "@/lib/utils";
@@ -27,6 +28,7 @@ export function Shell({ children }: { children: React.ReactNode }) {
     { href: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
     { href: "/downloads", label: "Downloads", icon: Download },
     { href: "/cart", label: "Cart", icon: ShoppingCart },
+    { href: "/control-center", label: "Control Center", icon: Shield },
   ];
 
   return (
