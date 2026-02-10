@@ -127,8 +127,8 @@ function TasksTab() {
       title: formData.get("title") as string,
       description: formData.get("description") as string,
       priority: formData.get("priority") as string,
-      assignedTo: assignedTo ? Number(assignedTo) : undefined,
-      dueDate: dueDate || undefined,
+      assignedTo: assignedTo || undefined,
+      dueDate: dueDate ? new Date(dueDate) : undefined,
     });
   };
 

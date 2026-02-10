@@ -1,23 +1,24 @@
 import { useQuery } from "@tanstack/react-query";
-import { api } from "@shared/routes";
 
 export function useUsers() {
   return useQuery({
     queryKey: ["cc-users"],
     queryFn: async () => {
-      // The users list API doesn't exist in the new schema
-      // Return mock data for now
-      return [];
+      const res = await fetch("/api/admin/users", { credentials: "include" });
+      if (!res.ok) return [];
+      return res.json();
     },
   });
 }
 
-export function useUser(id: number) {
+export function useUser(id: string) {
   return useQuery({
     queryKey: ["cc-user", id],
     queryFn: async () => {
-      // Return mock data for now
-      return null;
+      const res = await fetch(`/api/admin/users`, { credentials: "include" });
+      if (!res.ok) return null;
+      const users = await res.json();
+      return users.find((u: any) => u.id === id || u.userId === id) || null;
     },
     enabled: !!id,
   });

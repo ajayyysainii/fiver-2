@@ -287,7 +287,9 @@ export const insertAssistantSchema = createInsertSchema(assistants).omit({ id: t
 export const insertConversationSchema = createInsertSchema(conversations).omit({ id: true, createdAt: true, updatedAt: true });
 export const insertCcMessageSchema = createInsertSchema(ccMessages).omit({ id: true, createdAt: true });
 export const insertVaultDocumentSchema = createInsertSchema(vaultDocuments).omit({ id: true, createdAt: true, updatedAt: true });
-export const insertCcTaskSchema = createInsertSchema(ccTasks).omit({ id: true, createdAt: true, updatedAt: true, completedAt: true });
+export const insertCcTaskSchema = createInsertSchema(ccTasks, {
+  dueDate: z.coerce.date().optional().nullable(),
+}).omit({ id: true, createdAt: true, updatedAt: true, completedAt: true });
 export const insertDecisionSchema = createInsertSchema(decisions).omit({ id: true, createdAt: true });
 export const insertCcAssetSchema = createInsertSchema(ccAssets).omit({ id: true, createdAt: true, updatedAt: true });
 export const insertInternalMessageSchema = createInsertSchema(internalMessages).omit({ id: true, createdAt: true });

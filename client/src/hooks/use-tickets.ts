@@ -5,7 +5,7 @@ export function useTickets(filters?: { status?: string; priority?: string }) {
     queryKey: ["cc-tickets", filters],
     queryFn: async () => {
       const res = await fetch("/api/admin/tickets", { credentials: "include" });
-      if (!res.ok) throw new Error("Failed to fetch tickets");
+      if (!res.ok) return [];
       return res.json();
     },
   });
@@ -22,7 +22,10 @@ export function useCreateTicket() {
         credentials: "include",
       });
 
-      if (!res.ok) throw new Error("Failed to create ticket");
+      if (!res.ok) {
+        const err = await res.json().catch(() => ({ message: "Failed to create ticket" }));
+        throw new Error(err.message || "Failed to create ticket");
+      }
       return res.json();
     },
     onSuccess: () => {

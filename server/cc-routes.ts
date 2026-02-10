@@ -11,6 +11,7 @@ import {
     insertAssistantSchema
 } from "@shared/schema";
 import { authStorage } from "./auth/storage";
+import { seedControlCenter } from "./cc-seed";
 
 // Middleware to require admin access
 async function requireAdmin(req: Request, res: Response, next: NextFunction) {
@@ -35,6 +36,9 @@ async function requireAdmin(req: Request, res: Response, next: NextFunction) {
 }
 
 export function registerControlCenterRoutes(app: Express) {
+    // Seed CC tables with initial data
+    seedControlCenter().catch(console.error);
+
     // Apply admin middleware to all Control Center routes
     app.use("/api/cc", requireAdmin);
     app.use("/api/dashboard", requireAdmin);
@@ -210,8 +214,10 @@ export function registerControlCenterRoutes(app: Express) {
             res.status(201).json(task);
         } catch (err) {
             if (err instanceof z.ZodError) {
-                return res.status(400).json({ message: err.errors[0].message });
+                console.error("Zod validation errors:", JSON.stringify(err.errors, null, 2));
+                return res.status(400).json({ message: err.errors[0].message, errors: err.errors });
             }
+            console.error("Task creation error:", err);
             res.status(500).json({ message: "Internal server error" });
         }
     });
@@ -321,6 +327,17 @@ export function registerControlCenterRoutes(app: Express) {
         } catch (err) {
             res.status(500).json({ message: "Internal server error" });
         }
+    });
+
+    // --- FUTURE INTEGRATION PLACEHOLDERS (disabled) ---
+    app.get("/api/legacy/sync", (req, res) => {
+        res.status(503).json({ message: "Integration not yet active. FAMILY_LEGACY_PLATFORM=false" });
+    });
+    app.get("/api/legacy/users", (req, res) => {
+        res.status(503).json({ message: "Integration not yet active. FAMILY_LEGACY_PLATFORM=false" });
+    });
+    app.get("/api/legacy/knowledge", (req, res) => {
+        res.status(503).json({ message: "Integration not yet active. FAMILY_LEGACY_PLATFORM=false" });
     });
 }
 
