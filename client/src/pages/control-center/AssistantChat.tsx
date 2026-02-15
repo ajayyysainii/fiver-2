@@ -57,7 +57,6 @@ export default function AssistantChat() {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
-            userId: 1,
             assistantId: Number(id),
             title: "New Conversation",
           }),

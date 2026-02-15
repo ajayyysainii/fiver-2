@@ -122,10 +122,31 @@ export function registerControlCenterRoutes(app: Express) {
 
     app.post(api.conversations.create.path, async (req, res) => {
         try {
-            const conv = await ccStorage.createConversation(req.body);
+            const userId = (req.user as any)?.id;
+            if (!userId) {
+                return res.status(401).json({ message: "Unauthorized" });
+            }
+            const { assistantId, title } = req.body;
+            
+            // Validate assistantId exists
+            if (!assistantId) {
+                return res.status(400).json({ message: "assistantId is required" });
+            }
+            
+            const assistant = await ccStorage.getAssistant(Number(assistantId));
+            if (!assistant) {
+                return res.status(404).json({ message: "Assistant not found" });
+            }
+            
+            const conv = await ccStorage.createConversation({ 
+                userId, 
+                assistantId: Number(assistantId), 
+                title: title || "New Conversation" 
+            });
             res.status(201).json(conv);
         } catch (err) {
-            res.status(500).json({ message: "Internal server error" });
+            console.error("Error creating conversation:", err);
+            res.status(500).json({ message: "Internal server error", details: String(err) });
         }
     });
 

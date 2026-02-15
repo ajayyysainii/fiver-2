@@ -74,7 +74,7 @@ function Router() {
           <Assistants />
         </CCLayout>
       </Route>
-      <Route path="/control-center/assistants/:id">
+      <Route path="/control-center/assistants/:id/chat">
         {(params) => (
           <CCLayout>
             <AssistantChat />
