@@ -3,6 +3,7 @@ import type { Server } from "http";
 import path from "path";
 import fs from "fs";
 import { storage } from "./storage";
+import { authStorage } from "./auth/storage";
 import { api } from "@shared/routes";
 import { z } from "zod";
 import { setupAuth, registerAuthRoutes, isAuthenticated } from "./auth";
@@ -42,6 +43,29 @@ export async function registerRoutes(
   app.get("/api/admin/users", isAuthenticated, checkRole(["admin", "support", "developer"]), async (req, res) => {
     const profiles = await storage.getAllProfiles();
     res.json(profiles);
+  });
+
+  app.patch("/api/admin/users/:userId/role", isAuthenticated, checkRole(["admin", "developer"]), async (req, res) => {
+    const { userId } = req.params;
+    const { role, isAdmin } = req.body;
+
+    try {
+      // Update profile role
+      if (role) {
+        await storage.updateProfile(userId, { role });
+      }
+
+      // Update admin status on user record
+      if (typeof isAdmin === "boolean") {
+        await authStorage.updateUser(userId, { isAdmin });
+      }
+
+      const updatedProfile = await storage.getProfile(userId);
+      res.json(updatedProfile);
+    } catch (err) {
+      console.error("Error updating user role:", err);
+      res.status(500).json({ message: "Failed to update user role" });
+    }
   });
 
   app.get("/api/admin/tickets", isAuthenticated, checkRole(["admin", "support"]), async (req, res) => {

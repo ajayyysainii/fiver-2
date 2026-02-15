@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useQuery } from "@tanstack/react-query";
+import { useUsers, useUpdateUserRole } from "@/hooks/use-users";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -11,25 +11,30 @@ import {
   TableHeader,
   TableRow
 } from "@/components/ui/table";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+  DialogDescription,
+} from "@/components/ui/dialog";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Label } from "@/components/ui/label";
 import { StatusBadge } from "@/components/control-center/StatusBadge";
-import { Plus, Search, Loader2 } from "lucide-react";
-
-// Simple mock/placeholder for user data until proper user management is set up
-function useUsers() {
-  return useQuery({
-    queryKey: ["cc-users"],
-    queryFn: async () => {
-      // Fetch from the admin profiles endpoint
-      const res = await fetch("/api/admin/users", { credentials: "include" });
-      if (!res.ok) return [];
-      return res.json();
-    },
-  });
-}
+import { Plus, Search, Loader2, UserPlus } from "lucide-react";
+import { useToast } from "@/hooks/use-toast";
 
 export default function Users() {
   const [search, setSearch] = useState("");
-  const { data: users, isLoading } = useUsers();
+  const [dialogOpen, setDialogOpen] = useState(false);
+  const { data: users, isLoading } = useUsers({ search });
 
   return (
     <div className="space-y-6 animate-in fade-in duration-500">
@@ -48,9 +53,7 @@ export default function Users() {
               onChange={(e) => setSearch(e.target.value)}
             />
           </div>
-          <Button className="shrink-0 gap-2">
-            <Plus className="w-4 h-4" /> Add User
-          </Button>
+          <AddUserDialog open={dialogOpen} onOpenChange={setDialogOpen} users={users || []} />
         </div>
       </div>
 
@@ -99,5 +102,117 @@ export default function Users() {
         </Table>
       </Card>
     </div>
+  );
+}
+
+function AddUserDialog({ 
+  open, 
+  onOpenChange, 
+  users 
+}: { 
+  open: boolean; 
+  onOpenChange: (open: boolean) => void;
+  users: any[];
+}) {
+  const { toast } = useToast();
+  const updateRole = useUpdateUserRole();
+  const [selectedUserId, setSelectedUserId] = useState<string>("");
+  const [selectedRole, setSelectedRole] = useState<string>("family");
+  const [makeAdmin, setMakeAdmin] = useState(false);
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!selectedUserId) {
+      toast({ variant: "destructive", title: "Error", description: "Please select a user" });
+      return;
+    }
+
+    updateRole.mutate(
+      { userId: selectedUserId, role: selectedRole, isAdmin: makeAdmin },
+      {
+        onSuccess: () => {
+          toast({ title: "User updated", description: "User role has been updated successfully." });
+          onOpenChange(false);
+          setSelectedUserId("");
+          setSelectedRole("family");
+          setMakeAdmin(false);
+        },
+        onError: (err) => {
+          toast({ variant: "destructive", title: "Error", description: err.message });
+        },
+      }
+    );
+  };
+
+  return (
+    <Dialog open={open} onOpenChange={onOpenChange}>
+      <DialogTrigger asChild>
+        <Button className="shrink-0 gap-2">
+          <Plus className="w-4 h-4" /> Add User
+        </Button>
+      </DialogTrigger>
+      <DialogContent className="sm:max-w-[425px]">
+        <DialogHeader>
+          <DialogTitle>Manage User Access</DialogTitle>
+          <DialogDescription>
+            Users sign in via Google. Select an existing user to update their role and permissions.
+          </DialogDescription>
+        </DialogHeader>
+        <form onSubmit={handleSubmit} className="space-y-4 pt-4">
+          <div className="space-y-2">
+            <Label htmlFor="user">Select User</Label>
+            <Select value={selectedUserId} onValueChange={setSelectedUserId}>
+              <SelectTrigger>
+                <SelectValue placeholder="Select a user..." />
+              </SelectTrigger>
+              <SelectContent>
+                {users.map((user: any) => (
+                  <SelectItem key={user.userId || user.id} value={user.userId || user.id}>
+                    {user.email || user.userId || user.id}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+
+          <div className="space-y-2">
+            <Label>Role</Label>
+            <Select value={selectedRole} onValueChange={setSelectedRole}>
+              <SelectTrigger>
+                <SelectValue placeholder="Select role" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="family">Family</SelectItem>
+                <SelectItem value="pro">Pro</SelectItem>
+                <SelectItem value="admin">Admin</SelectItem>
+                <SelectItem value="support">Support</SelectItem>
+                <SelectItem value="affiliate_manager">Affiliate Manager</SelectItem>
+                <SelectItem value="developer">Developer</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+
+          <div className="flex items-center space-x-2">
+            <input
+              type="checkbox"
+              id="makeAdmin"
+              checked={makeAdmin}
+              onChange={(e) => setMakeAdmin(e.target.checked)}
+              className="h-4 w-4 rounded border-gray-300"
+            />
+            <Label htmlFor="makeAdmin" className="text-sm font-normal">
+              Grant Control Center access (admin)
+            </Label>
+          </div>
+
+          <div className="flex justify-end pt-4">
+            <Button type="submit" disabled={updateRole.isPending}>
+              {updateRole.isPending ? <Loader2 className="w-4 h-4 animate-spin mr-2" /> : null}
+              Update User
+            </Button>
+          </div>
+        </form>
+      </DialogContent>
+    </Dialog>
   );
 }
